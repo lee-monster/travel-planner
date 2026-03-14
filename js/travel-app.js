@@ -26,7 +26,9 @@
     authToken: null,
     // Bookmarks: [{spotId, type}]
     bookmarks: [],
-    activeTab: 'explore'
+    activeTab: 'explore',
+    // Cache all loaded spots by id for bookmark lookup across filters
+    spotCache: {}
   };
 
   var CAT_ICONS = {
@@ -144,6 +146,7 @@
       _svgIcon: function(color, icon) {
         var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30">' +
           '<circle cx="15" cy="15" r="12" fill="' + color + '" stroke="white" stroke-width="3"/>' +
+          '<text x="15" y="19" text-anchor="middle" font-size="13">' + icon + '</text>' +
           '</svg>';
         return {
           url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
@@ -502,7 +505,7 @@
     var interestedSpots = [];
 
     state.bookmarks.forEach(function(bm) {
-      var spot = state.spots.find(function(s) { return s.id === bm.spotId; });
+      var spot = state.spots.find(function(s) { return s.id === bm.spotId; }) || state.spotCache[bm.spotId];
       if (!spot) return;
       if (bm.type === 'want_to_visit') visitSpots.push(spot);
       else if (bm.type === 'interested') interestedSpots.push(spot);
@@ -575,6 +578,8 @@
         } else {
           state.spots = data.items || [];
         }
+        // Cache all spots for bookmark lookup across filters
+        state.spots.forEach(function(s) { state.spotCache[s.id] = s; });
         state.hasMore = data.hasMore || false;
         state.nextCursor = data.nextCursor || null;
         state.loading = false;
