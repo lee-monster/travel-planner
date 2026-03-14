@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TravelKo - Discover Korea | 한국 여행 가이드</title>
+  <meta name="description" content="TravelKo - Discover the best travel spots in Korea, recommended by the community. 커뮤니티가 추천하는 한국 여행 명소.">
+  <meta name="theme-color" content="#059669">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="TravelKo - Discover Korea">
+  <meta property="og:description" content="Discover the best travel spots in Korea with interactive Naver Map. Food, attractions, cafes, nature and more.">
+  <meta property="og:image" content="https://travel.koinfo.kr/images/og-travel.png">
+  <meta property="og:url" content="https://travel.koinfo.kr/">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="ko_KR">
+  <meta property="og:locale:alternate" content="id_ID">
+  <meta property="og:locale:alternate" content="mn_MN">
+  <meta property="og:locale:alternate" content="ms_MY">
+  <meta property="og:locale:alternate" content="vi_VN">
+  <meta property="og:site_name" content="TravelKo">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="TravelKo - Discover Korea">
+  <meta name="twitter:description" content="Discover the best travel spots in Korea with interactive map.">
+  <meta name="twitter:image" content="https://travel.koinfo.kr/images/og-travel.png">
+  <link rel="canonical" href="https://travel.koinfo.kr/">
+  <link rel="alternate" hreflang="en" href="https://travel.koinfo.kr/">
+  <link rel="alternate" hreflang="ko" href="https://travel.koinfo.kr/">
+  <link rel="alternate" hreflang="id" href="https://travel.koinfo.kr/">
+  <link rel="alternate" hreflang="mn" href="https://travel.koinfo.kr/">
+  <link rel="alternate" hreflang="ms" href="https://travel.koinfo.kr/">
+  <link rel="alternate" hreflang="vi" href="https://travel.koinfo.kr/">
+  <link rel="alternate" hreflang="x-default" href="https://travel.koinfo.kr/">
+  <!-- GEO tags for Korea-focused travel service -->
+  <meta name="geo.region" content="KR">
+  <meta name="geo.placename" content="South Korea">
+  <meta name="geo.position" content="37.5665;126.9780">
+  <meta name="ICBM" content="37.5665, 126.9780">
+  <!-- Additional SEO -->
+  <meta name="keywords" content="Korea travel, Korean restaurants, Seoul cafes, Busan attractions, Korea tourism, K-food, Korean culture, travel guide Korea, foreigner Korea, 한국 여행, 외국인 한국 관광">
+  <meta name="author" content="TravelKo by KoInfo">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://travel.koinfo.kr/#website",
+        "url": "https://travel.koinfo.kr/",
+        "name": "TravelKo",
+        "description": "Discover the best travel spots in Korea recommended by the community",
+        "publisher": { "@id": "https://travel.koinfo.kr/#organization" },
+        "inLanguage": ["en", "ko", "id", "mn", "ms", "vi"],
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://travel.koinfo.kr/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "TravelAgency",
+        "@id": "https://travel.koinfo.kr/#organization",
+        "name": "TravelKo",
+        "url": "https://travel.koinfo.kr/",
+        "logo": "https://travel.koinfo.kr/images/og-travel.png",
+        "description": "Community-driven Korea travel guide for foreigners living in or visiting South Korea",
+        "areaServed": {
+          "@type": "Country",
+          "name": "South Korea",
+          "sameAs": "https://en.wikipedia.org/wiki/South_Korea"
+        },
+        "audience": {
+          "@type": "Audience",
+          "audienceType": "Foreign tourists and residents in South Korea"
+        },
+        "sameAs": ["https://koinfo.kr"]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "KoInfo", "item": "https://koinfo.kr/" },
+          { "@type": "ListItem", "position": 2, "name": "TravelKo", "item": "https://travel.koinfo.kr/" }
+        ]
+      }
+    ]
+  }
+  </script>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23059669'/%3E%3Ctext x='16' y='23' text-anchor='middle' font-family='Arial,sans-serif' font-weight='800' font-size='22' fill='%23FFFFFF'%3ET%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="css/travel-app.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+
+  <!-- Main Layout -->
+  <div class="ta-layout">
+    <!-- Sidebar -->
+    <aside class="ta-sidebar" id="ta-sidebar">
+      <!-- Header inside sidebar -->
+      <header class="ta-topbar">
+        <a href="/" class="ta-brand">
+          <img src="images/og-travel.png" alt="TravelKo" class="ta-brand-logo">
+        </a>
+        <div class="ta-topbar-actions">
+          <select class="ta-lang-select" id="ta-lang-select" onchange="taSetLanguage(this.value)">
+            <option value="en">EN</option>
+            <option value="ko">KR</option>
+            <option value="id">ID</option>
+            <option value="mn">MN</option>
+            <option value="ms">MS</option>
+            <option value="vi">VI</option>
+          </select>
+          <!-- Auth: Login/Profile -->
+          <div class="ta-auth" id="ta-auth">
+            <button class="ta-auth-login" id="ta-auth-login" onclick="taGoogleSignIn()" data-i18n="auth.signIn">Sign In</button>
+            <div class="ta-auth-profile" id="ta-auth-profile" style="display:none">
+              <img class="ta-auth-avatar" id="ta-auth-avatar" src="" alt="">
+              <div class="ta-auth-menu" id="ta-auth-menu">
+                <div class="ta-auth-name" id="ta-auth-name"></div>
+                <button onclick="taShowMySpots()" data-i18n="bookmark.mySpots">My Spots</button>
+                <button onclick="taShowPlanner()" data-i18n="planner.btn">Plan Trip</button>
+                <button onclick="taSignOut()" data-i18n="auth.signOut">Sign Out</button>
+              </div>
+            </div>
+          </div>
+          <a href="https://koinfo.kr" class="ta-koinfo-link">KoInfo</a>
+        </div>
+      </header>
+
+      <div class="ta-search-wrap">
+        <svg class="ta-search-icon" viewBox="0 0 20 20" fill="currentColor" width="16" height="16"><path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clip-rule="evenodd"/></svg>
+        <input type="text" class="ta-search" id="ta-search" data-i18n-ph="app.searchPh" placeholder="Search places...">
+      </div>
+
+      <!-- Tab Navigation: Explore / My Spots -->
+      <div class="ta-tabs" id="ta-tabs">
+        <button class="ta-tab active" data-tab="explore" onclick="taSwitchTab('explore')">Explore</button>
+        <button class="ta-tab" data-tab="myspots" onclick="taSwitchTab('myspots')" data-i18n="bookmark.mySpots">My Spots</button>
+      </div>
+
+      <!-- Explore Tab Content -->
+      <div class="ta-tab-content active" id="ta-tab-explore">
+        <div class="ta-filters">
+          <div class="ta-cat-row" id="ta-cat-row">
+            <button class="ta-cat-btn active" data-cat="all" data-i18n="app.catAll">All</button>
+            <button class="ta-cat-btn" data-cat="food" data-i18n="app.catFood">Food</button>
+            <button class="ta-cat-btn" data-cat="attraction" data-i18n="app.catAttraction">Attractions</button>
+            <button class="ta-cat-btn" data-cat="cafe" data-i18n="app.catCafe">Cafe</button>
+            <button class="ta-cat-btn" data-cat="nature" data-i18n="app.catNature">Nature</button>
+            <button class="ta-cat-btn" data-cat="shopping" data-i18n="app.catShopping">Shopping</button>
+            <button class="ta-cat-btn" data-cat="nightlife" data-i18n="app.catNightlife">Nightlife</button>
+          </div>
+          <select class="ta-region-select" id="ta-region-select">
+            <option value="" data-i18n="app.regionAll">All Regions</option>
+            <option value="Seoul" data-i18n="app.regionSeoul">Seoul</option>
+            <option value="Busan" data-i18n="app.regionBusan">Busan</option>
+            <option value="Jeju" data-i18n="app.regionJeju">Jeju</option>
+            <option value="Incheon" data-i18n="app.regionIncheon">Incheon</option>
+            <option value="Gyeonggi" data-i18n="app.regionGyeonggi">Gyeonggi</option>
+            <option value="Other" data-i18n="app.regionOther">Other</option>
+          </select>
+        </div>
+
+        <!-- Spot List -->
+        <div class="ta-list" id="ta-list">
+          <div class="ta-list-status" id="ta-loading" data-i18n="app.loading">Loading spots...</div>
+        </div>
+      </div>
+
+      <!-- My Spots Tab Content -->
+      <div class="ta-tab-content" id="ta-tab-myspots">
+        <div class="ta-myspots" id="ta-myspots">
+          <div class="ta-myspots-section">
+            <h3 data-i18n="bookmark.wantToVisit">Want to Visit</h3>
+            <div id="ta-myspots-visit" class="ta-myspots-list"></div>
+          </div>
+          <div class="ta-myspots-section">
+            <h3 data-i18n="bookmark.interested">Interested</h3>
+            <div id="ta-myspots-interested" class="ta-myspots-list"></div>
+          </div>
+          <button class="ta-planner-cta" id="ta-planner-cta" onclick="taShowPlanner()" style="display:none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            <span data-i18n="planner.btn">Plan Trip</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Detail Panel -->
+      <div class="ta-detail" id="ta-detail">
+        <button class="ta-detail-back" id="ta-detail-back" onclick="taBackToList()">← Back</button>
+        <div id="ta-detail-images" class="ta-detail-images"></div>
+        <div class="ta-detail-body">
+          <span id="ta-detail-cat" class="ta-spot-cat"></span>
+          <h2 id="ta-detail-name"></h2>
+          <!-- Bookmark buttons -->
+          <div class="ta-detail-bookmarks" id="ta-detail-bookmarks"></div>
+          <div class="ta-detail-meta" id="ta-detail-meta"></div>
+          <div id="ta-detail-tags" class="ta-detail-tags"></div>
+          <div id="ta-detail-desc" class="ta-detail-desc"></div>
+          <div id="ta-detail-address" class="ta-detail-address"></div>
+          <div id="ta-detail-actions"></div>
+          <div id="ta-detail-by" class="ta-detail-by"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Sidebar Toggle -->
+    <button class="ta-sidebar-toggle" id="ta-sidebar-toggle" onclick="taToggleSidebar()" title="Toggle sidebar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+
+    <!-- Map -->
+    <div class="ta-map-wrap">
+      <div id="ta-map"></div>
+    </div>
+  </div>
+
+  <!-- FAB -->
+  <button class="ta-fab" id="ta-fab" onclick="taShowSubmit()" data-i18n="app.shareSpot">Share a Spot</button>
+
+  <!-- Submit Modal -->
+  <div class="ta-modal-overlay" id="ta-submit-overlay">
+    <div class="ta-modal">
+      <h2 data-i18n="app.submitTitle">Share a Travel Spot</h2>
+      <p class="ta-modal-notice" data-i18n="app.submitNotice">Your submission will appear after admin review.</p>
+      <form id="ta-submit-form" onsubmit="taSubmitSpot(event)">
+        <div class="ta-form-group">
+          <label data-i18n="app.placeLabel">Place Name</label>
+          <input type="text" id="ta-sub-name" required maxlength="100" data-i18n-ph="app.placePh" placeholder="e.g. Gyeongbokgung Palace">
+        </div>
+        <div class="ta-form-group">
+          <label data-i18n="app.categoryLabel">Category</label>
+          <select id="ta-sub-category" required>
+            <option value="food" data-i18n="app.catFood">Food</option>
+            <option value="attraction" data-i18n="app.catAttraction">Attractions</option>
+            <option value="cafe" data-i18n="app.catCafe">Cafe</option>
+            <option value="nature" data-i18n="app.catNature">Nature</option>
+            <option value="shopping" data-i18n="app.catShopping">Shopping</option>
+            <option value="nightlife" data-i18n="app.catNightlife">Nightlife</option>
+          </select>
+        </div>
+        <div class="ta-form-group">
+          <label data-i18n="app.descLabel">Your Review</label>
+          <textarea id="ta-sub-desc" required maxlength="3000" rows="5" data-i18n-ph="app.descPh" placeholder="Share your experience..."></textarea>
+        </div>
+        <div class="ta-form-group">
+          <label data-i18n="app.addressLabel">Address</label>
+          <input type="text" id="ta-sub-address" maxlength="200" data-i18n-ph="app.addressPh" placeholder="Search address...">
+        </div>
+        <div class="ta-form-group">
+          <label data-i18n="app.instagramLabel">Instagram Tags</label>
+          <input type="text" id="ta-sub-instagram" maxlength="100" data-i18n-ph="app.instagramPh" placeholder="@username or #hashtag">
+        </div>
+        <div class="ta-form-group">
+          <label data-i18n="app.authorLabel">Your Name</label>
+          <input type="text" id="ta-sub-author" required maxlength="30" data-i18n-ph="app.authorPh" placeholder="Your name">
+        </div>
+        <div class="ta-form-actions">
+          <button type="button" class="ta-btn-secondary" onclick="taCloseSubmit()" data-i18n="app.cancelBtn">Cancel</button>
+          <button type="submit" class="ta-btn-primary" data-i18n="app.submitBtn">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Planner Modal -->
+  <div class="ta-modal-overlay" id="ta-planner-overlay">
+    <div class="ta-modal ta-modal-planner">
+      <div id="ta-planner-form-view">
+        <h2 data-i18n="planner.title">AI Travel Planner</h2>
+        <p class="ta-modal-notice" data-i18n="planner.desc">Plan your trip based on your saved spots</p>
+        <div class="ta-form-group">
+          <label data-i18n="planner.days">Trip Duration</label>
+          <div class="ta-planner-days">
+            <input type="range" id="ta-planner-days" min="1" max="14" value="3">
+            <span id="ta-planner-days-val">3</span>
+            <span data-i18n="planner.daysUnit">days</span>
+          </div>
+        </div>
+        <div class="ta-form-group">
+          <label data-i18n="planner.budget">Budget</label>
+          <div class="ta-planner-options" id="ta-planner-budget">
+            <button class="ta-option-btn" data-val="budget" data-i18n="planner.budgetBudget">Budget-friendly</button>
+            <button class="ta-option-btn active" data-val="moderate" data-i18n="planner.budgetModerate">Moderate</button>
+            <button class="ta-option-btn" data-val="luxury" data-i18n="planner.budgetLuxury">Luxury</button>
+          </div>
+        </div>
+        <div class="ta-form-group">
+          <label data-i18n="planner.style">Travel Style</label>
+          <div class="ta-planner-options" id="ta-planner-style">
+            <button class="ta-option-btn" data-val="relaxed" data-i18n="planner.styleRelaxed">Relaxed</button>
+            <button class="ta-option-btn active" data-val="balanced" data-i18n="planner.styleBalanced">Balanced</button>
+            <button class="ta-option-btn" data-val="packed" data-i18n="planner.stylePacked">Packed</button>
+          </div>
+        </div>
+        <div class="ta-form-group">
+          <label data-i18n="planner.spots">Spots to Include</label>
+          <div class="ta-planner-spots" id="ta-planner-spots"></div>
+        </div>
+        <div class="ta-form-actions">
+          <button type="button" class="ta-btn-secondary" onclick="taClosePlanner()" data-i18n="planner.close">Close</button>
+          <button type="button" class="ta-btn-primary" id="ta-planner-generate" onclick="taGeneratePlan()" data-i18n="planner.generate">Generate Plan</button>
+        </div>
+      </div>
+      <div id="ta-planner-result-view" style="display:none">
+        <h2 data-i18n="planner.result">Your Travel Plan</h2>
+        <div id="ta-planner-result" class="ta-planner-result"></div>
+        <div class="ta-form-actions">
+          <button type="button" class="ta-btn-secondary" onclick="taClosePlanner()" data-i18n="planner.close">Close</button>
+          <button type="button" class="ta-btn-primary" onclick="taPlannerBackToForm()" data-i18n="planner.retry">Generate Again</button>
+        </div>
+      </div>
+      <div id="ta-planner-loading-view" style="display:none">
+        <div class="ta-planner-loading">
+          <div class="ta-spinner"></div>
+          <p data-i18n="planner.generating">Creating your travel plan...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Google Sign-In container -->
+  <div id="g_id_onload" style="display:none"></div>
+
+  <script>
+    // Sidebar toggle
+    window.taToggleSidebar = function() {
+      var sidebar = document.getElementById('ta-sidebar');
+      var toggle = document.getElementById('ta-sidebar-toggle');
+      var layout = document.querySelector('.ta-layout');
+      layout.classList.toggle('sidebar-collapsed');
+      // Trigger map resize after transition
+      setTimeout(function() {
+        if (window._taTriggerResize) window._taTriggerResize();
+      }, 350);
+    };
+
+    // Travel site always loads travel lang + travel-app
+    var ls = document.createElement('script');
+    ls.src = 'sites/travel/lang.js';
+    ls.onload = function() {
+      var as = document.createElement('script');
+      as.src = 'js/travel-app.js';
+      document.head.appendChild(as);
+    };
+    document.head.appendChild(ls);
+  </script>
+</body>
+</html>

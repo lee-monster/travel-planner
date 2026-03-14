@@ -1,0 +1,9 @@
+{
+  "name": "koinfo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "KoInfo - Multi-country information platform for foreigners in Korea",
+  "dependencies": {
+    "@notionhq/client": "^2.2.0"
+  }
+}
