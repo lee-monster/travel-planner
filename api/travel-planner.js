@@ -1,7 +1,11 @@
 // POST /api/travel-planner - AI Travel Planner using Gemini 2.0 Flash with Google Search Grounding
+const { Client } = require('@notionhq/client');
 const { getUserFromRequest, setCors } = require('./_lib/auth');
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const notion = new Client({ auth: process.env.NOTION_TOKEN_TRAVEL });
+const USERS_DB = process.env.NOTION_DB_USERS;
+const DAILY_LIMIT = 20;
 
 module.exports = async function handler(req, res) {
   setCors(res);
@@ -13,6 +17,30 @@ module.exports = async function handler(req, res) {
 
   if (!GEMINI_API_KEY) {
     return res.status(500).json({ error: 'AI planner not configured - missing GEMINI_API_KEY' });
+  }
+
+  // Check daily usage limit
+  var userPage, usage, todayKey, todayCount;
+  try {
+    userPage = await findUserPage(user.googleId);
+    usage = userPage ? parsePlannerUsage(userPage) : {};
+    todayKey = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    todayCount = usage[todayKey] || 0;
+
+    if (todayCount >= DAILY_LIMIT) {
+      return res.status(429).json({
+        error: 'rate_limit',
+        limit: DAILY_LIMIT,
+        used: todayCount,
+        remaining: 0
+      });
+    }
+  } catch (err) {
+    console.error('Usage check error:', err);
+    // Allow request if usage check fails
+    usage = {};
+    todayKey = new Date().toISOString().slice(0, 10);
+    todayCount = 0;
   }
 
   const { spots, days, budget, style, lang } = req.body;
@@ -120,16 +148,57 @@ Create a day-by-day plan that covers all these spots efficiently. Include meals,
       .map(function(p) { return p.text; })
       .join('');
 
+    // Increment usage after successful generation
+    try {
+      if (userPage) {
+        usage[todayKey] = todayCount + 1;
+        // Clean up old entries (keep only last 7 days)
+        var cleanUsage = {};
+        Object.keys(usage).sort().slice(-7).forEach(function(k) { cleanUsage[k] = usage[k]; });
+        await notion.pages.update({
+          page_id: userPage.id,
+          properties: {
+            PlannerUsage: { rich_text: [{ text: { content: JSON.stringify(cleanUsage) } }] }
+          }
+        });
+      }
+    } catch (err) {
+      console.error('Usage update error:', err);
+    }
+
     return res.status(200).json({
       success: true,
       plan: plan,
-      usage: data.usageMetadata
+      remaining: DAILY_LIMIT - todayCount - 1
     });
   } catch (err) {
     console.error('Planner error:', err);
     return res.status(500).json({ error: 'Failed to generate travel plan', detail: err.message });
   }
 };
+
+async function findUserPage(googleId) {
+  var response = await notion.databases.query({
+    database_id: USERS_DB,
+    filter: {
+      property: 'GoogleId',
+      rich_text: { equals: googleId }
+    },
+    page_size: 1
+  });
+  return response.results[0] || null;
+}
+
+function parsePlannerUsage(userPage) {
+  try {
+    var prop = userPage.properties.PlannerUsage;
+    if (!prop || !prop.rich_text || !prop.rich_text.length) return {};
+    var raw = prop.rich_text.map(function(r) { return r.plain_text; }).join('');
+    return JSON.parse(raw);
+  } catch (e) {
+    return {};
+  }
+}
 
 // Increase Vercel function timeout (Hobby: max 60s, Pro: max 300s)
 module.exports.config = {

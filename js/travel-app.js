@@ -1225,6 +1225,12 @@
         document.getElementById('ta-planner-result').innerHTML = renderMarkdown(data.plan);
         document.getElementById('ta-planner-loading-view').style.display = 'none';
         document.getElementById('ta-planner-result-view').style.display = '';
+        if (typeof data.remaining === 'number') {
+          showToast(t('planner.remaining').replace('{n}', data.remaining));
+        }
+      } else if (data.error === 'rate_limit') {
+        showToast(t('planner.rateLimit').replace('{limit}', data.limit));
+        taPlannerBackToForm();
       } else {
         var errMsg = data.detail || data.error || t('planner.error');
         console.error('Planner error:', errMsg);

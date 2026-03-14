@@ -89,6 +89,8 @@ const translations = {
     "planner.close": "Close",
     "planner.noSpots": "Save spots as 'Want to Visit' first",
     "planner.error": "Failed to generate plan. Please try again.",
+    "planner.rateLimit": "Daily limit reached ({limit} plans/day). Try again tomorrow!",
+    "planner.remaining": "{n} plans remaining today",
     "planner.btn": "Plan Trip",
 
     "footer.text": "© 2026 TravelKo by KoInfo. Discover Korea together.",
@@ -184,6 +186,8 @@ const translations = {
     "planner.close": "닫기",
     "planner.noSpots": "먼저 '방문할 곳'에 장소를 저장하세요",
     "planner.error": "계획 생성에 실패했습니다. 다시 시도해 주세요.",
+    "planner.rateLimit": "일일 사용 한도에 도달했습니다 (하루 {limit}회). 내일 다시 시도해 주세요!",
+    "planner.remaining": "오늘 {n}회 남음",
     "planner.btn": "여행 계획",
 
     "footer.text": "© 2026 TravelKo by KoInfo. 함께 한국을 발견하세요.",
@@ -279,6 +283,8 @@ const translations = {
     "planner.close": "Tutup",
     "planner.noSpots": "Simpan tempat ke 'Ingin Dikunjungi' dulu",
     "planner.error": "Gagal membuat rencana. Silakan coba lagi.",
+    "planner.rateLimit": "Batas harian tercapai ({limit} rencana/hari). Coba lagi besok!",
+    "planner.remaining": "{n} rencana tersisa hari ini",
     "planner.btn": "Rencana Perjalanan",
 
     "footer.text": "© 2026 TravelKo by KoInfo. Temukan Korea bersama.",
@@ -374,6 +380,8 @@ const translations = {
     "planner.close": "Хаах",
     "planner.noSpots": "Эхлээд 'Очих газар'-т газар хадгалаарай",
     "planner.error": "Төлөвлөгөө үүсгэж чадсангүй. Дахин оролдоно уу.",
+    "planner.rateLimit": "Өдрийн хязгаарт хүрсэн ({limit} төлөвлөгөө/өдөр). Маргааш дахин оролдоно уу!",
+    "planner.remaining": "Өнөөдөр {n} төлөвлөгөө үлдсэн",
     "planner.btn": "Аялал төлөвлөх",
 
     "footer.text": "© 2026 TravelKo by KoInfo. Солонгосыг хамтдаа нээцгээе.",
@@ -469,6 +477,8 @@ const translations = {
     "planner.close": "Tutup",
     "planner.noSpots": "Simpan tempat ke 'Ingin Dikunjungi' dahulu",
     "planner.error": "Gagal mencipta rancangan. Sila cuba lagi.",
+    "planner.rateLimit": "Had harian dicapai ({limit} rancangan/hari). Cuba lagi esok!",
+    "planner.remaining": "{n} rancangan baki hari ini",
     "planner.btn": "Rancang Perjalanan",
 
     "footer.text": "© 2026 TravelKo by KoInfo. Temui Korea bersama.",
@@ -564,6 +574,8 @@ const translations = {
     "planner.close": "\u0110\u00f3ng",
     "planner.noSpots": "H\u00e3y l\u01b0u \u0111\u1ecba \u0111i\u1ec3m v\u00e0o 'Mu\u1ed1n \u0111\u1ebfn' tr\u01b0\u1edbc",
     "planner.error": "T\u1ea1o k\u1ebf ho\u1ea1ch th\u1ea5t b\u1ea1i. Vui l\u00f2ng th\u1eed l\u1ea1i.",
+    "planner.rateLimit": "\u0110\u00e3 \u0111\u1ea1t gi\u1edbi h\u1ea1n h\u00e0ng ng\u00e0y ({limit} k\u1ebf ho\u1ea1ch/ng\u00e0y). H\u00e3y th\u1eed l\u1ea1i v\u00e0o ng\u00e0y mai!",
+    "planner.remaining": "C\u00f2n l\u1ea1i {n} k\u1ebf ho\u1ea1ch h\u00f4m nay",
     "planner.btn": "L\u1eadp k\u1ebf ho\u1ea1ch",
 
     "footer.text": "\u00a9 2026 TravelKo by KoInfo. C\u00f9ng kh\u00e1m ph\u00e1 H\u00e0n Qu\u1ed1c.",
