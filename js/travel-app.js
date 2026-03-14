@@ -472,6 +472,7 @@
     });
     document.querySelectorAll('.ta-tab-content').forEach(function(c) {
       c.classList.remove('active');
+      c.style.display = '';
     });
     var contentId = tab === 'explore' ? 'ta-tab-explore' : 'ta-tab-myspots';
     document.getElementById(contentId).classList.add('active');
