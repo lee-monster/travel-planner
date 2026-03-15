@@ -7,6 +7,8 @@
   ],
   "routes": [
     { "handle": "filesystem" },
+    { "src": "/privacy", "dest": "/privacy.html" },
+    { "src": "/terms", "dest": "/terms.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "headers": [
