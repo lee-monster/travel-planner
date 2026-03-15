@@ -353,6 +353,12 @@
     var popup = document.getElementById('ta-google-popup');
     if (popup) popup.remove();
 
+    if (!response || !response.credential) {
+      console.error('No credential in Google response:', response);
+      showToast('Sign in failed. Please try again.');
+      return;
+    }
+
     fetch('/api/auth/google', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -368,10 +374,14 @@
         updateAuthUI();
         fetchBookmarks();
         showToast(t('auth.welcome') + ', ' + data.user.name + '!');
+      } else {
+        console.error('Auth failed:', data);
+        showToast('Sign in failed: ' + (data.error || 'Unknown error'));
       }
     })
     .catch(function(err) {
       console.error('Auth error:', err);
+      showToast('Sign in failed. Please try again.');
     });
   }
 

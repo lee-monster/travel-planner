@@ -39,10 +39,16 @@ function verifyToken(token) {
 async function verifyGoogleToken(idToken) {
   try {
     const res = await fetch('https://oauth2.googleapis.com/tokeninfo?id_token=' + encodeURIComponent(idToken));
-    if (!res.ok) return null;
+    if (!res.ok) {
+      console.error('Google tokeninfo failed:', res.status, await res.text());
+      return null;
+    }
     const data = await res.json();
     // Verify audience matches our client ID
-    if (GOOGLE_CLIENT_ID && data.aud !== GOOGLE_CLIENT_ID) return null;
+    if (GOOGLE_CLIENT_ID && data.aud !== GOOGLE_CLIENT_ID) {
+      console.error('Google aud mismatch:', data.aud, '!=', GOOGLE_CLIENT_ID);
+      return null;
+    }
     return {
       googleId: data.sub,
       email: data.email,
@@ -50,6 +56,7 @@ async function verifyGoogleToken(idToken) {
       avatar: data.picture || ''
     };
   } catch (e) {
+    console.error('Google token verification error:', e);
     return null;
   }
 }
