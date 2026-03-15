@@ -48,8 +48,8 @@ module.exports = async function handler(req, res) {
       }
     });
   } catch (err) {
-    console.error('Auth error:', err);
-    return res.status(500).json({ error: 'Authentication failed' });
+    console.error('Auth error:', err.message, err.body || err);
+    return res.status(500).json({ error: 'Authentication failed: ' + err.message });
   }
 };
 
@@ -66,25 +66,32 @@ async function findUserByGoogleId(googleId) {
 }
 
 async function createUser(googleUser) {
+  const properties = {
+    Name: { title: [{ text: { content: googleUser.name } }] },
+    GoogleId: { rich_text: [{ text: { content: googleUser.googleId } }] },
+    Email: { rich_text: [{ text: { content: googleUser.email } }] },
+    Bookmarks: { rich_text: [{ text: { content: '[]' } }] }
+  };
+  // Only set Avatar if it's a valid URL
+  if (googleUser.avatar && googleUser.avatar.startsWith('http')) {
+    properties.Avatar = { url: googleUser.avatar };
+  }
   const page = await notion.pages.create({
     parent: { database_id: USERS_DB },
-    properties: {
-      Name: { title: [{ text: { content: googleUser.name } }] },
-      GoogleId: { rich_text: [{ text: { content: googleUser.googleId } }] },
-      Email: { rich_text: [{ text: { content: googleUser.email } }] },
-      Avatar: { url: googleUser.avatar || null },
-      Bookmarks: { rich_text: [{ text: { content: '[]' } }] }
-    }
+    properties
   });
   return page;
 }
 
 async function updateUser(pageId, googleUser) {
+  const properties = {
+    Name: { title: [{ text: { content: googleUser.name } }] }
+  };
+  if (googleUser.avatar && googleUser.avatar.startsWith('http')) {
+    properties.Avatar = { url: googleUser.avatar };
+  }
   await notion.pages.update({
     page_id: pageId,
-    properties: {
-      Name: { title: [{ text: { content: googleUser.name } }] },
-      Avatar: { url: googleUser.avatar || null }
-    }
+    properties
   });
 }
