@@ -94,6 +94,8 @@ const translations = {
     "planner.btn": "Plan Trip",
 
     "footer.text": "© 2026 TravelKo by KoInfo. Discover Korea together.",
+    "footer.privacy": "Privacy Policy",
+    "footer.terms": "Terms of Service",
   },
 
   ko: {
@@ -191,6 +193,8 @@ const translations = {
     "planner.btn": "여행 계획",
 
     "footer.text": "© 2026 TravelKo by KoInfo. 함께 한국을 발견하세요.",
+    "footer.privacy": "개인정보처리방침",
+    "footer.terms": "서비스 이용약관",
   },
 
   id: {
@@ -288,6 +292,8 @@ const translations = {
     "planner.btn": "Rencana Perjalanan",
 
     "footer.text": "© 2026 TravelKo by KoInfo. Temukan Korea bersama.",
+    "footer.privacy": "Kebijakan Privasi",
+    "footer.terms": "Ketentuan Layanan",
   },
 
   mn: {
@@ -385,6 +391,8 @@ const translations = {
     "planner.btn": "Аялал төлөвлөх",
 
     "footer.text": "© 2026 TravelKo by KoInfo. Солонгосыг хамтдаа нээцгээе.",
+    "footer.privacy": "Нууцлалын бодлого",
+    "footer.terms": "Үйлчилгээний нөхцөл",
   },
 
   ms: {
@@ -482,6 +490,8 @@ const translations = {
     "planner.btn": "Rancang Perjalanan",
 
     "footer.text": "© 2026 TravelKo by KoInfo. Temui Korea bersama.",
+    "footer.privacy": "Dasar Privasi",
+    "footer.terms": "Terma Perkhidmatan",
   },
 
   vi: {
@@ -579,5 +589,7 @@ const translations = {
     "planner.btn": "L\u1eadp k\u1ebf ho\u1ea1ch",
 
     "footer.text": "\u00a9 2026 TravelKo by KoInfo. C\u00f9ng kh\u00e1m ph\u00e1 H\u00e0n Qu\u1ed1c.",
+    "footer.privacy": "Ch\u00ednh s\u00e1ch B\u1ea3o m\u1eadt",
+    "footer.terms": "\u0110i\u1ec1u kho\u1ea3n D\u1ecbch v\u1ee5",
   },
 };

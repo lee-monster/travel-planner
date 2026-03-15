@@ -560,3 +560,11 @@ body {
   .ta-map-wrap { height: 60vh; }
   .ta-fab { bottom: calc(40vh + 8px); padding: 10px 16px; font-size: 0.82rem; }
 }
+
+/* Footer */
+.ta-footer { padding: 1rem 1.25rem; text-align: center; border-top: 1px solid var(--t-gray-200); background: var(--t-gray-50); font-size: 0.78rem; color: var(--t-gray-600); }
+.ta-footer p { margin-bottom: 0.35rem; }
+.ta-footer-links { display: flex; justify-content: center; gap: 0.5rem; align-items: center; }
+.ta-footer-links a { color: var(--t-gray-600); text-decoration: none; }
+.ta-footer-links a:hover { color: var(--t-primary); text-decoration: underline; }
+.ta-footer-links span { color: var(--t-gray-300); }
