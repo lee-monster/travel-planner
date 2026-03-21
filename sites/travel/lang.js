@@ -1,6 +1,8 @@
 const translations = {
   en: {
     "common.tagline": "TravelKo",
+    "seo.title": "TravelKo - Discover Korea | Best Travel Guide",
+    "seo.description": "Discover the best travel spots in Korea recommended by the community. Food, attractions, cafes, nature and more with interactive map.",
     "nav.home": "Home",
     "nav.explore": "Explore",
     "nav.lang": "한국어",
@@ -100,6 +102,8 @@ const translations = {
 
   ko: {
     "common.tagline": "트래블코",
+    "seo.title": "트래블코 - 한국 여행 가이드 | 커뮤니티 추천 명소",
+    "seo.description": "커뮤니티가 추천하는 한국 최고의 여행 명소를 발견하세요. 맛집, 관광지, 카페, 자연 등 인터랙티브 지도와 함께.",
     "nav.home": "홈",
     "nav.explore": "탐색",
     "nav.lang": "English",
@@ -199,6 +203,8 @@ const translations = {
 
   id: {
     "common.tagline": "TravelKo",
+    "seo.title": "TravelKo - Temukan Korea | Panduan Wisata Terbaik",
+    "seo.description": "Temukan tempat wisata terbaik di Korea yang direkomendasikan komunitas. Kuliner, atraksi, kafe, alam dan lainnya dengan peta interaktif.",
     "nav.home": "Beranda",
     "nav.explore": "Jelajahi",
     "nav.lang": "한국어",
@@ -298,6 +304,8 @@ const translations = {
 
   mn: {
     "common.tagline": "TravelKo",
+    "seo.title": "TravelKo - Солонгосыг нээгээрэй | Аялалын хамгийн сайн гарын авлага",
+    "seo.description": "Коммунитигээс санал болгосон Солонгосын шилдэг аялалын газруудыг нээгээрэй. Хоол, үзвэр, кафе, байгаль болон бусад.",
     "nav.home": "Нүүр",
     "nav.explore": "Нээх",
     "nav.lang": "한국어",
@@ -397,6 +405,8 @@ const translations = {
 
   ms: {
     "common.tagline": "TravelKo",
+    "seo.title": "TravelKo - Temui Korea | Panduan Pelancongan Terbaik",
+    "seo.description": "Temui tempat pelancongan terbaik di Korea yang dicadangkan oleh komuniti. Makanan, tarikan, kafe, alam semula jadi dan banyak lagi.",
     "nav.home": "Laman Utama",
     "nav.explore": "Terokai",
     "nav.lang": "한국어",
@@ -496,6 +506,8 @@ const translations = {
 
   vi: {
     "common.tagline": "TravelKo",
+    "seo.title": "TravelKo - Khám phá Hàn Quốc | Hướng dẫn du lịch tốt nhất",
+    "seo.description": "Khám phá những điểm du lịch tốt nhất tại Hàn Quốc được cộng đồng đề xuất. Ẩm thực, điểm tham quan, quán cà phê, thiên nhiên và nhiều hơn nữa.",
     "nav.home": "Trang ch\u1ee7",
     "nav.explore": "Kh\u00e1m ph\u00e1",
     "nav.lang": "\ud55c\uad6d\uc5b4",

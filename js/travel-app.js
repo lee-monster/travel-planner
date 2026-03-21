@@ -4,9 +4,19 @@
 (function() {
   'use strict';
 
+  // === Resolve initial language from URL > localStorage > default ===
+  var SUPPORTED_LANGS = ['en', 'ko', 'id', 'mn', 'ms', 'vi'];
+  function resolveInitialLang() {
+    var urlLang = new URLSearchParams(window.location.search).get('lang');
+    if (urlLang && SUPPORTED_LANGS.indexOf(urlLang) !== -1) return urlLang;
+    var stored = localStorage.getItem('travelko_lang');
+    if (stored && SUPPORTED_LANGS.indexOf(stored) !== -1) return stored;
+    return 'en';
+  }
+
   // === State ===
   var state = {
-    lang: localStorage.getItem('travelko_lang') || 'en',
+    lang: resolveInitialLang(),
     category: 'all',
     region: '',
     search: '',
@@ -235,6 +245,8 @@
     state.lang = lang;
     localStorage.setItem('travelko_lang', lang);
     document.getElementById('ta-lang-select').value = lang;
+    updateUrlLang(lang);
+    updateSeoMeta(lang);
     applyTranslations();
     // Re-fetch spots in the new language from API
     fetchSpots(false);
@@ -247,9 +259,87 @@
     }
   };
 
+  // Update URL ?lang= parameter without page reload
+  function updateUrlLang(lang) {
+    var url = new URL(window.location.href);
+    url.searchParams.set('lang', lang);
+    window.history.replaceState(null, '', url.toString());
+  }
+
+  // Update SEO meta tags, hreflang, canonical, html lang
+  function updateSeoMeta(lang) {
+    var t = (typeof translations !== 'undefined') ? translations : {};
+    var langData = t[lang] || t['en'] || {};
+    var baseUrl = 'https://travel.koinfo.kr';
+
+    // html lang attribute
+    document.documentElement.lang = lang;
+
+    // title
+    var title = langData['seo.title'] || 'TravelKo - Discover Korea';
+    document.title = title;
+
+    // meta description
+    var descMeta = document.querySelector('meta[name="description"]');
+    if (descMeta) descMeta.content = langData['seo.description'] || '';
+
+    // og tags
+    var ogTitle = document.querySelector('meta[property="og:title"]');
+    if (ogTitle) ogTitle.content = title;
+    var ogDesc = document.querySelector('meta[property="og:description"]');
+    if (ogDesc) ogDesc.content = langData['seo.description'] || '';
+
+    // og:locale
+    var localeMap = { en: 'en_US', ko: 'ko_KR', id: 'id_ID', mn: 'mn_MN', ms: 'ms_MY', vi: 'vi_VN' };
+    var ogLocale = document.querySelector('meta[property="og:locale"]');
+    if (ogLocale) ogLocale.content = localeMap[lang] || 'en_US';
+
+    // og:url
+    var currentUrl = baseUrl + '/?lang=' + lang;
+    var ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) ogUrl.content = currentUrl;
+
+    // canonical
+    var canonical = document.getElementById('seo-canonical');
+    if (canonical) canonical.href = currentUrl;
+
+    // twitter tags
+    var twTitle = document.querySelector('meta[name="twitter:title"]');
+    if (twTitle) twTitle.content = title;
+    var twDesc = document.querySelector('meta[name="twitter:description"]');
+    if (twDesc) twDesc.content = langData['seo.description'] || '';
+
+    // hreflang: remove old, create new
+    var oldLinks = document.querySelectorAll('link[rel="alternate"][hreflang]');
+    for (var i = 0; i < oldLinks.length; i++) oldLinks[i].remove();
+
+    var head = document.head;
+    var params = new URLSearchParams(window.location.search);
+    // Build base path preserving non-lang params
+    params.delete('lang');
+    var extraParams = params.toString();
+
+    SUPPORTED_LANGS.forEach(function(l) {
+      var link = document.createElement('link');
+      link.rel = 'alternate';
+      link.hreflang = l;
+      link.href = baseUrl + '/?lang=' + l + (extraParams ? '&' + extraParams : '');
+      head.appendChild(link);
+    });
+    // x-default points to English
+    var xdef = document.createElement('link');
+    xdef.rel = 'alternate';
+    xdef.hreflang = 'x-default';
+    xdef.href = baseUrl + '/' + (extraParams ? '?' + extraParams : '');
+    head.appendChild(xdef);
+  }
+
   function initLanguage() {
     var select = document.getElementById('ta-lang-select');
     select.value = state.lang;
+    localStorage.setItem('travelko_lang', state.lang);
+    updateUrlLang(state.lang);
+    updateSeoMeta(state.lang);
   }
 
   // === Auth ===
