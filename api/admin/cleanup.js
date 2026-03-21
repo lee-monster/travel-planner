@@ -18,9 +18,10 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  // Basic auth check
+  // Auth check: accepts JWT_SECRET or NOTION_TOKEN_TRAVEL as admin key
   const adminKey = req.headers['x-admin-key'];
-  if (!adminKey || adminKey !== process.env.JWT_SECRET) {
+  const validKeys = [process.env.JWT_SECRET, process.env.NOTION_TOKEN_TRAVEL].filter(Boolean);
+  if (!adminKey || !validKeys.includes(adminKey)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
