@@ -60,7 +60,7 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'query parameter required' });
   }
 
-  const googleKey = process.env.GOOGLE_MAPS_API_KEY;
+  const googleKey = process.env.GOOGLE_GEOCODING_API_KEY || process.env.GOOGLE_MAPS_API_KEY;
   const naverId = process.env.NAVER_MAPS_CLIENT_ID;
   const naverSecret = process.env.NAVER_MAPS_CLIENT_KEY;
 
