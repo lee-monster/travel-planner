@@ -1,8 +1,8 @@
 // Verify Spots API - Compare stored coordinates with geocoded address coordinates
 // Usage: GET /api/verify-spots              → verify all published spots
 //        GET /api/verify-spots?id=xxx       → verify a single spot by ID
-//        GET /api/verify-spots?threshold=200 → only show spots with >200m error (default: 100)
-// Returns: array of spots with coordinate discrepancies
+//        GET /api/verify-spots?threshold=200 → only flag spots with >200m error (default: 100)
+// Returns: { summary, results[] } sorted by distance descending
 const { Client } = require('@notionhq/client');
 const https = require('https');
 
@@ -17,16 +17,9 @@ function getPlainText(rt) {
   return rt.map(t => t.plain_text || '').join('');
 }
 
-function naverGeocode(query, clientId, clientSecret) {
+function httpsGet(url) {
   return new Promise((resolve, reject) => {
-    const url = `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(query)}`;
-    const options = {
-      headers: {
-        'X-NCP-APIGW-API-KEY-ID': clientId,
-        'X-NCP-APIGW-API-KEY': clientSecret,
-      },
-    };
-    https.get(url, options, (res) => {
+    https.get(url, (res) => {
       let data = '';
       res.on('data', (chunk) => { data += chunk; });
       res.on('end', () => {
@@ -35,6 +28,16 @@ function naverGeocode(query, clientId, clientSecret) {
       });
     }).on('error', reject);
   });
+}
+
+async function googleGeocode(query, apiKey) {
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&language=ko&region=kr&key=${apiKey}`;
+  const result = await httpsGet(url);
+  if (result.status === 'OK' && result.results && result.results.length > 0) {
+    const loc = result.results[0].geometry.location;
+    return { lat: loc.lat, lng: loc.lng, formattedAddress: result.results[0].formatted_address };
+  }
+  return null;
 }
 
 // Haversine distance in meters
@@ -48,7 +51,6 @@ function distanceMeters(lat1, lng1, lat2, lng2) {
   return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 }
 
-// Small delay to avoid rate limiting
 function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
 
 module.exports = async function handler(req, res) {
@@ -56,9 +58,8 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const clientId = process.env.NAVER_MAPS_CLIENT_ID;
-  const clientSecret = process.env.NAVER_MAPS_CLIENT_KEY;
-  if (!clientId || !clientSecret || !process.env.NOTION_TOKEN_TRAVEL) {
+  const googleKey = process.env.GOOGLE_MAPS_API_KEY;
+  if (!googleKey || !process.env.NOTION_TOKEN_TRAVEL) {
     return res.status(500).json({ error: 'Required API keys not configured' });
   }
 
@@ -104,11 +105,10 @@ module.exports = async function handler(req, res) {
         continue;
       }
 
-      // Geocode address
-      await delay(100); // Naver API rate limit
-      let geocoded;
+      await delay(50); // Google Geocoding rate limit
+      let geo;
       try {
-        geocoded = await naverGeocode(address, clientId, clientSecret);
+        geo = await googleGeocode(address, googleKey);
       } catch (e) {
         results.push({
           id: page.id, name, address, storedLat, storedLng,
@@ -117,7 +117,7 @@ module.exports = async function handler(req, res) {
         continue;
       }
 
-      if (!geocoded.addresses || geocoded.addresses.length === 0) {
+      if (!geo) {
         results.push({
           id: page.id, name, address, storedLat, storedLng,
           status: 'no_result', reason: 'address not found by geocoder',
@@ -125,28 +125,16 @@ module.exports = async function handler(req, res) {
         continue;
       }
 
-      const geo = geocoded.addresses[0];
-      const geoLat = parseFloat(geo.y);
-      const geoLng = parseFloat(geo.x);
-      const dist = Math.round(distanceMeters(storedLat, storedLng, geoLat, geoLng));
+      const dist = Math.round(distanceMeters(storedLat, storedLng, geo.lat, geo.lng));
 
-      if (dist >= threshold) {
-        results.push({
-          id: page.id, name, address,
-          storedLat, storedLng,
-          geocodedLat: geoLat, geocodedLng: geoLng,
-          distanceMeters: dist,
-          status: 'mismatch',
-        });
-      } else {
-        results.push({
-          id: page.id, name, address,
-          storedLat, storedLng,
-          geocodedLat: geoLat, geocodedLng: geoLng,
-          distanceMeters: dist,
-          status: 'ok',
-        });
-      }
+      results.push({
+        id: page.id, name, address,
+        storedLat, storedLng,
+        geocodedLat: geo.lat, geocodedLng: geo.lng,
+        geocodedAddress: geo.formattedAddress,
+        distanceMeters: dist,
+        status: dist >= threshold ? 'mismatch' : 'ok',
+      });
     }
 
     // Sort: mismatches first, then by distance descending
