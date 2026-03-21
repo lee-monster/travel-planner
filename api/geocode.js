@@ -80,8 +80,28 @@ module.exports = async function handler(req, res) {
       }
     }
 
+    // Debug: include raw provider response when no results found
+    let debug = undefined;
+    if (addresses.length === 0) {
+      debug = {};
+      if (googleKey) {
+        try {
+          const rawUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(query)}&language=ko&region=kr&key=${googleKey}`;
+          const raw = await httpsGet(rawUrl);
+          debug.google = { status: raw.status, error_message: raw.error_message || null, results_count: (raw.results || []).length };
+        } catch (e) { debug.google = { error: e.message }; }
+      }
+      if (naverId && naverSecret) {
+        try {
+          const rawUrl = `https://naveropenapi.apigw.ntruss.com/map-geocode/v2/geocode?query=${encodeURIComponent(query)}`;
+          const raw = await httpsGet(rawUrl, { 'X-NCP-APIGW-API-KEY-ID': naverId, 'X-NCP-APIGW-API-KEY': naverSecret });
+          debug.naver = { status: raw.status, errorMessage: raw.errorMessage || null, totalCount: raw.meta?.totalCount || 0 };
+        } catch (e) { debug.naver = { error: e.message }; }
+      }
+    }
+
     res.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate=604800');
-    res.status(200).json({ query, addresses });
+    res.status(200).json({ query, addresses, ...(debug ? { debug } : {}) });
   } catch (error) {
     console.error('Geocode API error:', error);
     res.status(500).json({ error: 'Geocoding failed: ' + error.message });
