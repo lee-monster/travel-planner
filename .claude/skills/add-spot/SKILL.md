@@ -1,6 +1,6 @@
 ---
 description: "Register new travel spots to TravelKo Notion DB. Takes place names, geocodes addresses, generates descriptions in 4 languages, and creates Notion pages with Published=false."
-user_invocable: true
+user-invocable: true
 ---
 
 # Add Spot Skill
