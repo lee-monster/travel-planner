@@ -1558,6 +1558,35 @@
 
   // === Travel Tips ===
   // Language-aware URLs for official Korean travel/transport sites
+  // Taxi review links — real traveler experiences per language
+  var TAXI_REVIEWS = {
+    en: [
+      { title: 'Taxi Apps in Korea Explained (2025)', url: 'https://www.korealivingguide.com/2025/11/taxi-apps-in-korea-explained-which-app.html' },
+      { title: 'How to Avoid Taxi Scams in Korea (2026)', url: 'https://www.love-korea.com/2026/01/how-to-avoid-taxi-scams-in-korea.html' },
+      { title: 'Taxis in Korea 2025: Complete Guide', url: 'https://unniespicking.com/taxis-in-korea-2025-guide/' }
+    ],
+    ko: [
+      { title: '외국인 필수 택시 어플 4가지 가이드', url: 'https://blog.myezl.com/%EC%99%B8%EA%B5%AD%EC%9D%B8-%ED%95%84%EC%88%98-%ED%83%9D%EC%8B%9C-%EC%96%B4%ED%94%8C-4%EA%B0%80%EC%A7%80-%ED%83%9D%EC%8B%9C-%EC%9D%B4%EC%9A%A9-%EA%B0%80%EC%9D%B4%EB%93%9C/' },
+      { title: '한국 방문 외국인 택시 앱 가이드 (2025)', url: 'https://life.eduroadusa.com/2025/09/kakaot-ut-uber-2025.html' }
+    ],
+    id: [
+      { title: 'Panduan Lengkap Taksi di Korea', url: 'https://www.haniseoul.com/id/travels/korea/korea-taxi-guide' },
+      { title: 'Tips Berguna Naik Taksi di Korea', url: 'https://creatrip.com/id/blog/2487' }
+    ],
+    mn: [
+      { title: 'Сөүл аяллын зөвлөх', url: 'https://www.airmarket.mn/page/163' },
+      { title: 'Taxis in Korea Guide (English)', url: 'https://unniespicking.com/taxis-in-korea-2025-guide/' }
+    ],
+    ms: [
+      { title: 'Melancong ke Korea dari Malaysia (2025)', url: 'https://wise.com/ms-my/blog/melancong-ke-korea-dari-malaysia' },
+      { title: 'Panduan Jalan ke Korea Selatan (2025)', url: 'https://javamilk.com/panduan-jalan-ke-korea-selatan/' }
+    ],
+    vi: [
+      { title: 'Kinh nghi\u1ec7m \u0111i taxi t\u1ea1i H\u00e0n Qu\u1ed1c (2025)', url: 'https://go-korea.com/kinh-nghiem-di-xe-taxi-tai-han-quoc/' },
+      { title: 'C\u00e1ch d\u00f9ng Kakao Taxi kh\u00f4ng c\u1ea7n s\u1ed1 H\u00e0n', url: 'https://creatrip.com/vi/blog/13840' }
+    ]
+  };
+
   var TIPS_URLS = {
     visitKorea: {
       en: 'https://english.visitkorea.or.kr/',
@@ -1640,6 +1669,57 @@
         '<div class="ta-tips-links">' +
           '<a href="' + tipsUrl('visitKorea') + '" target="_blank" rel="noopener" class="ta-tips-link ta-tips-link-primary">' +
             '🇰🇷 ' + t('tips.visitKorea') + '</a>' +
+        '</div>' +
+      '</div>' +
+      // Taxi Guide Section
+      '<div class="ta-tips-section ta-tips-taxi">' +
+        '<h3>🚕 ' + t('tips.taxiGuide') + '</h3>' +
+        '<p class="ta-tips-desc">' + t('tips.taxiIntro') + '</p>' +
+
+        '<h4>' + t('tips.taxiApp') + '</h4>' +
+        '<p class="ta-tips-desc">' + t('tips.taxiAppDesc') + '</p>' +
+        '<div class="ta-tips-links">' +
+          '<a href="https://play.google.com/store/apps/details?id=com.kakaomobility.kride" target="_blank" rel="noopener" class="ta-tips-link">' +
+            '📱 ' + t('tips.taxiKride') + '</a>' +
+          '<a href="https://english.seoul.go.kr/taba-taxi-app-for-international-tourists-in-seoul/" target="_blank" rel="noopener" class="ta-tips-link">' +
+            '📱 ' + t('tips.taxiTaba') + '</a>' +
+        '</div>' +
+
+        '<h4>' + t('tips.taxiHail') + '</h4>' +
+        '<p class="ta-tips-desc">' + t('tips.taxiHailDesc') + '</p>' +
+        '<p class="ta-tips-desc" style="font-style:italic">' + t('tips.taxiDoor') + '</p>' +
+
+        '<h4>' + t('tips.taxiTypes') + '</h4>' +
+        '<ul class="ta-tips-list">' +
+          '<li>🟠 ' + t('tips.taxiRegular') + '</li>' +
+          '<li>⬛ ' + t('tips.taxiDeluxe') + '</li>' +
+          '<li>🌐 ' + t('tips.taxiInternational') + '</li>' +
+        '</ul>' +
+
+        '<h4>' + t('tips.taxiPay') + '</h4>' +
+        '<p class="ta-tips-desc">' + t('tips.taxiPayDesc') + '</p>' +
+
+        '<h4>' + t('tips.taxiCost') + '</h4>' +
+        '<table class="ta-tips-table">' +
+          '<tr><td>✈️ Airport→Seoul</td><td>' + t('tips.taxiCostAirport') + '</td></tr>' +
+          '<tr><td>🏙️ City ride</td><td>' + t('tips.taxiCostCity') + '</td></tr>' +
+          '<tr><td>🌙 Night</td><td>' + t('tips.taxiCostNight') + '</td></tr>' +
+        '</table>' +
+
+        '<h4>⚠️ ' + t('tips.taxiSafety') + '</h4>' +
+        '<ul class="ta-tips-list">' +
+          '<li>' + t('tips.taxiSafety1') + '</li>' +
+          '<li>' + t('tips.taxiSafety2') + '</li>' +
+          '<li>' + t('tips.taxiSafety3') + '</li>' +
+          '<li>' + t('tips.taxiSafety4') + '</li>' +
+          '<li>' + t('tips.taxiSafety5') + '</li>' +
+        '</ul>' +
+
+        '<h4>📝 ' + t('tips.taxiReviews') + '</h4>' +
+        '<div class="ta-tips-links">' +
+          (TAXI_REVIEWS[state.lang] || TAXI_REVIEWS.en).map(function(r) {
+            return '<a href="' + r.url + '" target="_blank" rel="noopener" class="ta-tips-link">' + r.title + '</a>';
+          }).join('') +
         '</div>' +
       '</div>';
 

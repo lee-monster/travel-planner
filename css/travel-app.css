@@ -610,6 +610,8 @@ body {
 .ta-tips-link:hover { border-color: var(--t-primary); color: var(--t-primary); }
 .ta-tips-link-primary { border-color: var(--t-primary); color: var(--t-primary); font-weight: 600; }
 .ta-tips-link-primary:hover { background: var(--t-primary); color: var(--t-white); }
+.ta-tips-taxi { border-top: 2px solid var(--t-primary); padding-top: 16px; margin-top: 8px; }
+.ta-tips-taxi h4 { font-size: 0.85rem; color: var(--t-gray-800); margin: 14px 0 6px; }
 .ta-tips-updated { font-size: 0.75rem; color: var(--t-gray-400); text-align: right; margin-top: 12px; }
 
 /* Toast notification */
