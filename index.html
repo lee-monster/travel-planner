@@ -323,9 +323,11 @@
       <div id="ta-planner-result-view" style="display:none">
         <h2 data-i18n="planner.result">Your Travel Plan</h2>
         <div id="ta-planner-result" class="ta-planner-result"></div>
+        <div id="ta-share-panel" class="ta-share-panel" style="display:none"></div>
         <div class="ta-form-actions">
           <button type="button" class="ta-btn-secondary" onclick="taClosePlanner()" data-i18n="planner.close">Close</button>
           <button type="button" class="ta-btn-save" onclick="taSaveCurrentPlan()" data-i18n="planner.save">Save Plan</button>
+          <button type="button" class="ta-btn-share" onclick="taSharePlan()" data-i18n="planner.share">Share</button>
           <button type="button" class="ta-btn-primary" onclick="taPlannerBackToForm()" data-i18n="planner.retry">Generate Again</button>
         </div>
       </div>
@@ -357,8 +359,10 @@
         </div>
         <div id="ta-myplans-detail-meta" class="ta-myplans-detail-meta"></div>
         <div id="ta-myplans-detail-content" class="ta-planner-result"></div>
+        <div id="ta-share-panel-myplan" class="ta-share-panel" style="display:none"></div>
         <div class="ta-form-actions">
           <button type="button" class="ta-btn-secondary" onclick="taCloseMyPlans()" data-i18n="planner.close">Close</button>
+          <button type="button" class="ta-btn-share" onclick="taShareSavedPlan()" data-i18n="planner.share">Share</button>
         </div>
       </div>
     </div>

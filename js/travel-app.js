@@ -1532,6 +1532,8 @@
     var plans = getSavedPlans();
     var plan = plans.find(function(p) { return p.id === planId; });
     if (!plan) return;
+    _currentViewPlanId = planId;
+    document.getElementById('ta-share-panel-myplan').style.display = 'none';
 
     document.getElementById('ta-myplans-detail-title').textContent = plan.title;
     document.getElementById('ta-myplans-detail-meta').textContent =
@@ -1610,6 +1612,94 @@
   window.taCloseCompare = function() {
     document.getElementById('ta-compare-overlay').classList.remove('active');
     document.body.style.overflow = '';
+  };
+
+  // === Plan Sharing ===
+  var _currentViewPlanId = null; // track which saved plan is being viewed
+
+  function sharePlanData(planObj, panelId) {
+    var panel = document.getElementById(panelId);
+    panel.innerHTML = '<div class="ta-share-loading">' + t('planner.sharing') + '</div>';
+    panel.style.display = '';
+
+    fetch('/api/share-plan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: planObj.title || t('planner.planTitle').replace('{days}', planObj.days),
+        days: planObj.days,
+        budget: planObj.budget,
+        style: planObj.style,
+        spotNames: planObj.spotNames,
+        planHtml: planObj.planHtml,
+        lang: planObj.lang || state.lang
+      })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.success && data.shareUrl) {
+        renderShareButtons(panel, data.shareUrl, planObj.title || 'My Korea Travel Plan');
+      } else {
+        panel.innerHTML = '<p class="ta-share-error">' + (data.error || 'Failed to create share link') + '</p>';
+      }
+    })
+    .catch(function(err) {
+      panel.innerHTML = '<p class="ta-share-error">Failed to create share link</p>';
+    });
+  }
+
+  function renderShareButtons(panel, shareUrl, planTitle) {
+    var text = encodeURIComponent(planTitle + ' — TravelKo');
+    var url = encodeURIComponent(shareUrl);
+
+    panel.innerHTML =
+      '<div class="ta-share-header">' + t('planner.shareTitle') + '</div>' +
+      '<div class="ta-share-url-row">' +
+        '<input type="text" class="ta-share-url" value="' + escapeAttr(shareUrl) + '" readonly onclick="this.select()">' +
+        '<button class="ta-share-copy" onclick="taCopyShareUrl(this)">' + t('planner.copyLink') + '</button>' +
+      '</div>' +
+      '<div class="ta-share-buttons">' +
+        '<a href="https://wa.me/?text=' + text + '%20' + url + '" target="_blank" rel="noopener" class="ta-share-btn ta-share-whatsapp" title="WhatsApp">WhatsApp</a>' +
+        '<a href="https://www.facebook.com/sharer/sharer.php?u=' + url + '" target="_blank" rel="noopener" class="ta-share-btn ta-share-facebook" title="Facebook">Facebook</a>' +
+        '<a href="https://twitter.com/intent/tweet?text=' + text + '&url=' + url + '" target="_blank" rel="noopener" class="ta-share-btn ta-share-x" title="X (Twitter)">X</a>' +
+        '<a href="https://t.me/share/url?url=' + url + '&text=' + text + '" target="_blank" rel="noopener" class="ta-share-btn ta-share-telegram" title="Telegram">Telegram</a>' +
+      '</div>';
+  }
+
+  window.taCopyShareUrl = function(btn) {
+    var input = btn.parentElement.querySelector('.ta-share-url');
+    navigator.clipboard.writeText(input.value).then(function() {
+      btn.textContent = '✓';
+      setTimeout(function() { btn.textContent = t('planner.copyLink'); }, 2000);
+    }).catch(function() {
+      input.select();
+      document.execCommand('copy');
+      btn.textContent = '✓';
+      setTimeout(function() { btn.textContent = t('planner.copyLink'); }, 2000);
+    });
+  };
+
+  window.taSharePlan = function() {
+    var resultEl = document.getElementById('ta-planner-result');
+    if (!resultEl || !resultEl.innerHTML || !_lastPlanData) return;
+
+    sharePlanData({
+      title: _lastPlanData.spotNames ? t('planner.planTitle').replace('{days}', _lastPlanData.days) + ' — ' + _lastPlanData.spotNames.slice(0, 2).join(', ') : '',
+      days: _lastPlanData.days,
+      budget: _lastPlanData.budget,
+      style: _lastPlanData.style,
+      spotNames: _lastPlanData.spotNames,
+      planHtml: resultEl.innerHTML,
+      lang: _lastPlanData.lang
+    }, 'ta-share-panel');
+  };
+
+  window.taShareSavedPlan = function() {
+    if (!_currentViewPlanId) return;
+    var plans = getSavedPlans();
+    var plan = plans.find(function(p) { return p.id === _currentViewPlanId; });
+    if (!plan) return;
+    sharePlanData(plan, 'ta-share-panel-myplan');
   };
 
   // === Travel Tips ===

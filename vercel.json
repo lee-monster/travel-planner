@@ -5,6 +5,7 @@
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/guide/taxi", "destination": "/guide/taxi.html" },
     { "source": "/guide/transport", "destination": "/guide/transport.html" },
+    { "source": "/plan/:id", "destination": "/plan.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [

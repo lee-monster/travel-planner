@@ -523,6 +523,42 @@ body {
 @keyframes ta-spin { to { transform: rotate(360deg); } }
 .ta-planner-loading p { color: var(--t-gray-600); font-size: 0.92rem; }
 
+/* Share button & panel */
+.ta-btn-share {
+  padding: 8px 16px; border-radius: var(--t-radius-sm); font-size: 0.88rem; font-weight: 600;
+  cursor: pointer; border: 2px solid #3B82F6; background: var(--t-white); color: #3B82F6;
+}
+.ta-btn-share:hover { background: #3B82F6; color: var(--t-white); }
+.ta-share-panel {
+  border: 1px solid var(--t-gray-200); border-radius: var(--t-radius-sm);
+  padding: 14px; margin: 12px 0; background: var(--t-gray-50);
+}
+.ta-share-header { font-size: 0.85rem; font-weight: 600; color: var(--t-gray-800); margin-bottom: 10px; }
+.ta-share-url-row { display: flex; gap: 6px; margin-bottom: 10px; }
+.ta-share-url {
+  flex: 1; padding: 8px 10px; border: 1px solid var(--t-gray-200); border-radius: 4px;
+  font-size: 0.8rem; color: var(--t-gray-700); background: var(--t-white); outline: none;
+}
+.ta-share-copy {
+  padding: 8px 14px; border: 1px solid var(--t-gray-300); border-radius: 4px;
+  background: var(--t-white); cursor: pointer; font-size: 0.8rem; font-weight: 600;
+  color: var(--t-gray-700); white-space: nowrap;
+}
+.ta-share-copy:hover { border-color: var(--t-primary); color: var(--t-primary); }
+.ta-share-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.ta-share-btn {
+  display: inline-flex; align-items: center; padding: 7px 14px; border-radius: 6px;
+  font-size: 0.8rem; font-weight: 600; color: var(--t-white); text-decoration: none;
+  transition: opacity 0.2s;
+}
+.ta-share-btn:hover { opacity: 0.85; }
+.ta-share-whatsapp { background: #25D366; }
+.ta-share-facebook { background: #1877F2; }
+.ta-share-x { background: #000; }
+.ta-share-telegram { background: #26A5E4; }
+.ta-share-loading { font-size: 0.85rem; color: var(--t-gray-500); text-align: center; padding: 8px; }
+.ta-share-error { font-size: 0.85rem; color: #EF4444; text-align: center; }
+
 /* Save button */
 .ta-btn-save {
   padding: 8px 16px; border-radius: var(--t-radius-sm); font-size: 0.88rem; font-weight: 600;
