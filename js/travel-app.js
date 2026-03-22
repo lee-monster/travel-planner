@@ -1727,7 +1727,7 @@
             '🇰🇷 ' + t('tips.visitKorea') + '</a>' +
         '</div>' +
       '</div>' +
-      // Taxi Guide Section
+      // Taxi Guide Section (summary + link to full guide page)
       '<div class="ta-tips-section ta-tips-taxi">' +
         '<h3>🚕 ' + t('tips.taxiGuide') + '</h3>' +
         '<p class="ta-tips-desc">' + t('tips.taxiIntro') + '</p>' +
@@ -1776,6 +1776,12 @@
           (TAXI_REVIEWS[state.lang] || TAXI_REVIEWS.en).map(function(r) {
             return '<a href="' + r.url + '" target="_blank" rel="noopener" class="ta-tips-link">' + r.title + '</a>';
           }).join('') +
+        '</div>' +
+        '<div class="ta-tips-links" style="margin-top:12px">' +
+          '<a href="/guide/taxi?lang=' + state.lang + '" class="ta-tips-link ta-tips-link-primary">' +
+            '📖 ' + t('tips.taxiGuide') + ' — Full Guide</a>' +
+          '<a href="/guide/transport?lang=' + state.lang + '" class="ta-tips-link ta-tips-link-primary">' +
+            '🚆 ' + t('tips.moreTransport') + ' — Full Guide</a>' +
         '</div>' +
       '</div>';
 

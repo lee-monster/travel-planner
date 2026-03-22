@@ -18,6 +18,12 @@ module.exports = function handler(req, res) {
     basePaths.push({ path: '/?region=' + region, priority: '0.7', changefreq: 'weekly' });
   });
 
+  // Guide pages
+  var guides = ['taxi', 'transport'];
+  guides.forEach(function(guide) {
+    basePaths.push({ path: '/guide/' + guide, priority: '0.8', changefreq: 'monthly' });
+  });
+
   // Helper: append lang param to a path
   function langUrl(path, lang) {
     if (path.indexOf('?') !== -1) return baseUrl + path + '&lang=' + lang;

@@ -3,12 +3,16 @@
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/terms", "destination": "/terms.html" }
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/guide/transport", "destination": "/guide/transport.html" },
+    { "source": "/guide/taxi", "destination": "/guide/taxi.html" }
   ],
   "routes": [
     { "handle": "filesystem" },
     { "src": "/privacy", "dest": "/privacy.html" },
     { "src": "/terms", "dest": "/terms.html" },
+    { "src": "/guide/transport", "dest": "/guide/transport.html" },
+    { "src": "/guide/taxi", "dest": "/guide/taxi.html" },
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "headers": [
