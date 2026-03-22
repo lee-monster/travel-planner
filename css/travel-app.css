@@ -483,7 +483,7 @@ body {
   border: 1px solid var(--t-gray-100); border-radius: var(--t-radius-sm);
   font-size: 0.85rem; width: 100%; text-align: left;
 }
-.ta-planner-spot-item input[type="checkbox"] { accent-color: var(--t-primary); flex-shrink: 0; }
+.ta-planner-spot-item input[type="checkbox"] { accent-color: var(--t-primary); flex-shrink: 0; width: 16px; height: 16px; margin: 0; }
 .ta-planner-spot-item label { cursor: pointer; flex: 1; text-align: left; }
 
 /* Planner result */
