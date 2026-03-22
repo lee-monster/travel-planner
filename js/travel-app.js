@@ -1557,25 +1557,75 @@
   };
 
   // === Travel Tips ===
+  // Language-aware URLs for official Korean travel/transport sites
+  var TIPS_URLS = {
+    visitKorea: {
+      en: 'https://english.visitkorea.or.kr/',
+      ko: 'https://korean.visitkorea.or.kr/',
+      id: 'https://english.visitkorea.or.kr/',
+      mn: 'https://english.visitkorea.or.kr/',
+      ms: 'https://english.visitkorea.or.kr/',
+      vi: 'https://english.visitkorea.or.kr/'
+    },
+    visitKoreaTransport: {
+      en: 'https://english.visitkorea.or.kr/svc/planYourTravel/travelInfo/subTransportation.do',
+      ko: 'https://korean.visitkorea.or.kr/svc/planYourTravel/travelInfo/subTransportation.do',
+      id: 'https://english.visitkorea.or.kr/svc/planYourTravel/travelInfo/subTransportation.do',
+      mn: 'https://english.visitkorea.or.kr/svc/planYourTravel/travelInfo/subTransportation.do',
+      ms: 'https://english.visitkorea.or.kr/svc/planYourTravel/travelInfo/subTransportation.do',
+      vi: 'https://english.visitkorea.or.kr/svc/planYourTravel/travelInfo/subTransportation.do'
+    },
+    korail: {
+      en: 'https://www.korail.com/global/eng/ticket/reservation',
+      ko: 'https://www.korail.com/global/kor/ticket/reservation',
+      id: 'https://www.korail.com/global/id/ticket/reservation',
+      mn: 'https://www.korail.com/global/eng/ticket/reservation',
+      ms: 'https://www.korail.com/global/mas/ticket/reservation',
+      vi: 'https://www.korail.com/global/vi/ticket/reservation'
+    },
+    kobus: {
+      en: 'https://www.kobus.co.kr/web/eng/index.jsp',
+      ko: 'https://www.kobus.co.kr/',
+      id: 'https://www.kobus.co.kr/web/eng/index.jsp',
+      mn: 'https://www.kobus.co.kr/web/eng/index.jsp',
+      ms: 'https://www.kobus.co.kr/web/eng/index.jsp',
+      vi: 'https://www.kobus.co.kr/web/eng/index.jsp'
+    }
+  };
+
+  function tipsUrl(key) {
+    return (TIPS_URLS[key] || {})[state.lang] || TIPS_URLS[key].en;
+  }
+
   window.taShowTips = function() {
     var content = document.getElementById('ta-tips-content');
     content.innerHTML =
+      '<p class="ta-tips-official">' + t('tips.officialInfo') + '</p>' +
       '<div class="ta-tips-section">' +
         '<h3>' + t('tips.transport') + '</h3>' +
+        '<p class="ta-tips-desc">' + t('tips.transportDesc') + '</p>' +
         '<table class="ta-tips-table">' +
-          '<tr><td>' + t('tips.subway') + '</td><td>₩1,400 (' + t('tips.baseFare') + ', T-money) · ' + t('tips.distanceBased') + '</td></tr>' +
-          '<tr><td>' + t('tips.bus') + '</td><td>₩1,500</td></tr>' +
-          '<tr><td>' + t('tips.taxi') + '</td><td>₩4,800 (' + t('tips.baseFare') + ') · ' + t('tips.lateNight') + '</td></tr>' +
-          '<tr><td>' + t('tips.ktx') + '</td><td>Seoul↔Busan ₩59,800 · Seoul↔Daejeon ₩23,700</td></tr>' +
-          '<tr><td>' + t('tips.airport') + '</td><td>Incheon↔Seoul ₩9,500 (Express)</td></tr>' +
+          '<tr><td>' + t('tips.subway') + '</td><td>' + t('tips.subwayInfo') + '</td></tr>' +
+          '<tr><td>' + t('tips.bus') + '</td><td>' + t('tips.busInfo') + '</td></tr>' +
+          '<tr><td>' + t('tips.taxi') + '</td><td>' + t('tips.taxiInfo') + '</td></tr>' +
+          '<tr><td>' + t('tips.ktx') + '</td><td>' + t('tips.ktxInfo') + '</td></tr>' +
+          '<tr><td>' + t('tips.airport') + '</td><td>' + t('tips.airportInfo') + '</td></tr>' +
         '</table>' +
+        '<div class="ta-tips-links">' +
+          '<a href="' + tipsUrl('korail') + '" target="_blank" rel="noopener" class="ta-tips-link">' +
+            '🚄 ' + t('tips.bookKorail') + '</a>' +
+          '<a href="' + tipsUrl('kobus') + '" target="_blank" rel="noopener" class="ta-tips-link">' +
+            '🚌 ' + t('tips.bookBus') + '</a>' +
+          '<a href="' + tipsUrl('visitKoreaTransport') + '" target="_blank" rel="noopener" class="ta-tips-link">' +
+            '📋 ' + t('tips.moreTransport') + '</a>' +
+        '</div>' +
       '</div>' +
       '<div class="ta-tips-section">' +
         '<h3>' + t('tips.meals') + '</h3>' +
         '<table class="ta-tips-table">' +
-          '<tr><td>' + t('tips.budget') + '</td><td>~₩10,000 · ' + t('tips.budgetDesc') + '</td></tr>' +
-          '<tr><td>' + t('tips.moderate') + '</td><td>₩10,000~30,000 · ' + t('tips.moderateDesc') + '</td></tr>' +
-          '<tr><td>' + t('tips.luxury') + '</td><td>₩30,000+ · ' + t('tips.luxuryDesc') + '</td></tr>' +
+          '<tr><td>' + t('tips.budget') + '</td><td>' + t('tips.budgetDesc') + '</td></tr>' +
+          '<tr><td>' + t('tips.moderate') + '</td><td>' + t('tips.moderateDesc') + '</td></tr>' +
+          '<tr><td>' + t('tips.luxury') + '</td><td>' + t('tips.luxuryDesc') + '</td></tr>' +
         '</table>' +
       '</div>' +
       '<div class="ta-tips-section">' +
@@ -1585,7 +1635,12 @@
           '<li>🙅 ' + t('tips.tipping') + '</li>' +
           '<li>🏧 ' + t('tips.atm') + '</li>' +
           '<li>🚨 ' + t('tips.emergency') + '</li>' +
+          '<li>📞 ' + t('tips.hotline') + '</li>' +
         '</ul>' +
+        '<div class="ta-tips-links">' +
+          '<a href="' + tipsUrl('visitKorea') + '" target="_blank" rel="noopener" class="ta-tips-link ta-tips-link-primary">' +
+            '🇰🇷 ' + t('tips.visitKorea') + '</a>' +
+        '</div>' +
       '</div>';
 
     document.getElementById('ta-tips-overlay').classList.add('active');

@@ -598,6 +598,18 @@ body {
 .ta-tips-list { list-style: none; padding: 0; margin: 0; }
 .ta-tips-list li { padding: 6px 0; font-size: 0.82rem; color: var(--t-gray-700); border-bottom: 1px solid var(--t-gray-50); line-height: 1.5; }
 .ta-tips-list li:last-child { border-bottom: none; }
+.ta-tips-official { font-size: 0.78rem; color: var(--t-gray-500); margin-bottom: 16px; text-align: center; }
+.ta-tips-desc { font-size: 0.82rem; color: var(--t-gray-600); margin-bottom: 10px; line-height: 1.5; }
+.ta-tips-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.ta-tips-link {
+  display: inline-flex; align-items: center; gap: 4px; padding: 8px 14px;
+  border: 1px solid var(--t-gray-200); border-radius: var(--t-radius-sm);
+  font-size: 0.82rem; color: var(--t-gray-700); text-decoration: none;
+  transition: border-color 0.2s, color 0.2s;
+}
+.ta-tips-link:hover { border-color: var(--t-primary); color: var(--t-primary); }
+.ta-tips-link-primary { border-color: var(--t-primary); color: var(--t-primary); font-weight: 600; }
+.ta-tips-link-primary:hover { background: var(--t-primary); color: var(--t-white); }
 .ta-tips-updated { font-size: 0.75rem; color: var(--t-gray-400); text-align: right; margin-top: 12px; }
 
 /* Toast notification */
