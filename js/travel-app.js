@@ -810,8 +810,13 @@
       }).join('');
       imagesEl.style.display = '';
     } else {
-      imagesEl.style.display = 'none';
-      imagesEl.innerHTML = '';
+      imagesEl.innerHTML = '<div class="ta-detail-photos-loading"></div>';
+      imagesEl.style.display = '';
+    }
+
+    // Fetch Google Places photos if few/no images
+    if (allImages.length < 3 && spot.lat && spot.lng) {
+      fetchPlacePhotos(spot, imagesEl, allImages);
     }
 
     // Category badge
@@ -1373,6 +1378,50 @@
       .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
       .replace(/\n{2,}/g, '</p><p>')
       .replace(/\n/g, '<br>');
+  }
+
+  // === Google Places Photos ===
+  var _photoCache = {}; // cache by spot id
+
+  function fetchPlacePhotos(spot, imagesEl, existingImages) {
+    if (_photoCache[spot.id]) {
+      renderPlacePhotos(imagesEl, existingImages, _photoCache[spot.id], spot.name);
+      return;
+    }
+
+    fetch('/api/place-photos?name=' + encodeURIComponent(spot.name) +
+      '&lat=' + spot.lat + '&lng=' + spot.lng)
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.photos && data.photos.length > 0) {
+        _photoCache[spot.id] = data.photos;
+        renderPlacePhotos(imagesEl, existingImages, data.photos, spot.name);
+      } else if (existingImages.length === 0) {
+        imagesEl.style.display = 'none';
+        imagesEl.innerHTML = '';
+      }
+    })
+    .catch(function() {
+      if (existingImages.length === 0) {
+        imagesEl.style.display = 'none';
+        imagesEl.innerHTML = '';
+      }
+    });
+  }
+
+  function renderPlacePhotos(imagesEl, existingImages, googlePhotos, spotName) {
+    // Existing images first, then Google photos (deduplicated)
+    var existingHtml = existingImages.map(function(url) {
+      return '<img src="' + escapeAttr(url) + '" alt="' + escapeAttr(spotName) + '">';
+    }).join('');
+
+    var googleHtml = googlePhotos.map(function(p) {
+      return '<img src="' + escapeAttr(p.url) + '" alt="' + escapeAttr(spotName) + '" loading="lazy">';
+    }).join('');
+
+    imagesEl.innerHTML = existingHtml + googleHtml +
+      '<div class="ta-detail-photos-attr">Photos by Google</div>';
+    imagesEl.style.display = '';
   }
 
   // === Plan Save & Compare ===

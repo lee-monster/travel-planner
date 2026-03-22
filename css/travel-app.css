@@ -198,6 +198,13 @@ body {
   height: 220px; object-fit: cover; flex-shrink: 0;
 }
 .ta-detail-images img:only-child { width: 100%; }
+.ta-detail-photos-loading { height: 120px; display: flex; align-items: center; justify-content: center; width: 100%; }
+.ta-detail-photos-attr {
+  position: absolute; bottom: 4px; right: 8px; font-size: 0.65rem;
+  color: rgba(255,255,255,0.7); background: rgba(0,0,0,0.4);
+  padding: 2px 6px; border-radius: 3px; flex-shrink: 0; align-self: flex-end;
+}
+.ta-detail-images { position: relative; }
 .ta-detail-body { padding: 16px; }
 .ta-detail-body h2 { font-size: 1.25rem; color: var(--t-gray-900); margin: 8px 0; }
 .ta-detail-meta {
