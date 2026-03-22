@@ -3,7 +3,8 @@
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
-    { "source": "/guide/:path*", "destination": "/guide/:path*" },
+    { "source": "/guide/taxi", "destination": "/guide/taxi.html" },
+    { "source": "/guide/transport", "destination": "/guide/transport.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
