@@ -107,6 +107,7 @@ const translations = {
     "planner.savedLocal": "Saved on this device",
     "planner.selectToCompare": "Select 2-3 plans to compare",
     "planner.back": "Back",
+    "planner.namePrompt": "Name this plan:",
 
     "tips.title": "Korea Travel Guide",
     "tips.officialInfo": "Official travel information provided by Korea Tourism Organization",
@@ -281,6 +282,7 @@ const translations = {
     "planner.savedLocal": "이 기기에 저장됨",
     "planner.selectToCompare": "비교할 계획을 2~3개 선택하세요",
     "planner.back": "뒤로",
+    "planner.namePrompt": "계획 이름을 입력하세요:",
 
     "tips.title": "한국 여행 가이드",
     "tips.officialInfo": "한국관광공사 공식 여행 정보 제공",
@@ -455,6 +457,7 @@ const translations = {
     "planner.savedLocal": "Tersimpan di perangkat ini",
     "planner.selectToCompare": "Pilih 2-3 rencana untuk dibandingkan",
     "planner.back": "Kembali",
+    "planner.namePrompt": "Beri nama rencana ini:",
 
     "tips.title": "Panduan Wisata Korea",
     "tips.officialInfo": "Informasi resmi dari Korea Tourism Organization",
@@ -629,6 +632,7 @@ const translations = {
     "planner.savedLocal": "Энэ төхөөрөмж дээр хадгалсан",
     "planner.selectToCompare": "Харьцуулах 2-3 төлөвлөгөө сонгоно уу",
     "planner.back": "Буцах",
+    "planner.namePrompt": "Төлөвлөгөөний нэр:",
 
     "tips.title": "Солонгос аялалын гарын авлага",
     "tips.officialInfo": "Солонгосын Аялал Жуулчлалын Байгууллагын албан ёсны мэдээлэл",
@@ -803,6 +807,7 @@ const translations = {
     "planner.savedLocal": "Disimpan di peranti ini",
     "planner.selectToCompare": "Pilih 2-3 rancangan untuk dibandingkan",
     "planner.back": "Kembali",
+    "planner.namePrompt": "Namakan rancangan ini:",
 
     "tips.title": "Panduan Pelancongan Korea",
     "tips.officialInfo": "Maklumat rasmi dari Korea Tourism Organization",
@@ -977,6 +982,7 @@ const translations = {
     "planner.savedLocal": "\u0110\u00e3 l\u01b0u tr\u00ean thi\u1ebft b\u1ecb n\u00e0y",
     "planner.selectToCompare": "Ch\u1ecdn 2-3 k\u1ebf ho\u1ea1ch \u0111\u1ec3 so s\u00e1nh",
     "planner.back": "Quay l\u1ea1i",
+    "planner.namePrompt": "\u0110\u1eb7t t\u00ean k\u1ebf ho\u1ea1ch:",
 
     "tips.title": "H\u01b0\u1edbng d\u1eabn du l\u1ecbch H\u00e0n Qu\u1ed1c",
     "tips.officialInfo": "Th\u00f4ng tin ch\u00ednh th\u1ee9c t\u1eeb T\u1ed5 ch\u1ee9c Du l\u1ecbch H\u00e0n Qu\u1ed1c",

@@ -79,15 +79,39 @@ module.exports = async function handler(req, res) {
 Create a detailed, practical day-by-day travel itinerary based on the user's selected spots and preferences.
 Use Google Search to find the latest information about each spot (opening hours, prices, seasonal events, nearby restaurants).
 
-Rules:
+## Reference Transport Costs (as of Jan 2026, source: Korail/Kobus/Seoul Metro)
+- Subway: ₩1,400 base (T-money), distance-based extra
+- City bus: ₩1,500
+- Taxi: ₩4,800 base, ~₩1,000/km, late night (22:00-04:00) +20%
+- KTX Seoul↔Busan: ₩59,800 (2h 15m) | Seoul↔Daejeon: ₩23,700 (50m)
+- KTX Seoul↔Gangneung: ₩27,600 (1h 50m) | Seoul↔Gyeongju: ₩53,800 (2h)
+- Express Bus Seoul↔Busan: ₩23,000~34,500 (4h 20m) | Seoul↔Jeonju: ₩13,800 (2h 40m)
+- Express Bus Seoul↔Gangneung: ₩18,600 (2h 30m) | Seoul↔Gyeongju: ₩25,900 (3h 30m)
+- AREX Incheon Airport↔Seoul Station: ₩9,500 express (43m) / ₩4,850 regular (66m)
+- Taxi Incheon Airport→Seoul: ₩65,000~80,000 + toll ₩2,000
+
+## Rules
 - Organize spots logically by proximity and region to minimize travel time
 - Include estimated time at each spot (e.g., "1-2 hours")
-- Suggest specific meal recommendations near each area with current price ranges
-- Add transportation tips between spots (subway, bus, taxi with estimated cost)
-- Include morning/afternoon/evening time blocks
+- For EVERY transport segment, specify: mode, estimated cost in ₩, and travel time (e.g., "Subway Line 3 → Transfer Line 1, ~40 min, ₩1,550")
+- For inter-city travel, compare options (e.g., "KTX ₩59,800/2h15m vs Express Bus ₩23,000/4h20m") and recommend based on budget level
+- Suggest specific meal recommendations near each area with price ranges
+- Include morning/afternoon/evening time blocks with specific times (e.g., "09:00-11:00")
 - Match the travel pace to the user's style preference
-- Give specific budget estimates in KRW (₩) for each day
-- Add practical tips (best time to visit, what to wear, reservations needed, etc.)
+
+## Budget Summary Requirements
+- At the END of EACH day, provide a daily cost breakdown table:
+  - Transport: itemized costs
+  - Meals: breakfast/lunch/dinner estimates
+  - Admission: entrance fees
+  - **Day X Total: ₩XX,XXX**
+- At the VERY END of the plan, provide a **Grand Total Summary**:
+  - Total Transport: ₩XX,XXX
+  - Total Meals: ₩XX,XXX
+  - Total Admission: ₩XX,XXX
+  - **Trip Grand Total: ₩XX,XXX**
+  - Note: "Transport costs based on Jan 2026 fares (Korail, Kobus, Seoul Metro). Meal prices are approximate."
+- Add practical tips (best time to visit, what to wear, reservations needed)
 - If spots are in different regions, plan travel days between regions
 - Respond ENTIRELY in ${respondLang}
 - Use markdown formatting for readability`;
@@ -118,7 +142,7 @@ Create a day-by-day plan that covers all these spots efficiently. Include meals,
         tools: [{ google_search: {} }],
         generationConfig: {
           temperature: 1.0,
-          maxOutputTokens: 4096
+          maxOutputTokens: 8192
         }
       })
     });

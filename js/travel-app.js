@@ -1387,13 +1387,20 @@
       return;
     }
 
-    // Get the raw markdown from the rendered HTML (use stored text)
-    var planMarkdown = resultEl.innerText || resultEl.textContent;
+    // Ask user for a plan name
+    var defaultName = t('planner.planTitle').replace('{days}', _lastPlanData.days);
+    if (_lastPlanData.spotNames && _lastPlanData.spotNames.length > 0) {
+      // Add first spot region hint
+      defaultName += ' — ' + _lastPlanData.spotNames.slice(0, 2).join(', ');
+    }
+    var planName = prompt(t('planner.namePrompt'), defaultName);
+    if (planName === null) return; // cancelled
+    planName = planName.trim() || defaultName;
 
     var plan = {
       id: 'plan_' + Date.now(),
       createdAt: new Date().toISOString(),
-      title: t('planner.planTitle').replace('{days}', _lastPlanData.days),
+      title: planName,
       days: _lastPlanData.days,
       budget: _lastPlanData.budget,
       style: _lastPlanData.style,
