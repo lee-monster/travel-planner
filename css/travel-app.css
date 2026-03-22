@@ -516,6 +516,90 @@ body {
 @keyframes ta-spin { to { transform: rotate(360deg); } }
 .ta-planner-loading p { color: var(--t-gray-600); font-size: 0.92rem; }
 
+/* Save button */
+.ta-btn-save {
+  padding: 8px 16px; border-radius: var(--t-radius-sm); font-size: 0.88rem; font-weight: 600;
+  cursor: pointer; border: 2px solid var(--t-primary); background: var(--t-white); color: var(--t-primary);
+}
+.ta-btn-save:hover { background: var(--t-primary); color: var(--t-white); }
+
+/* My Plans */
+.ta-myplans-notice { font-size: 0.78rem; color: var(--t-gray-500); margin-bottom: 12px; }
+.ta-myplans-list { display: flex; flex-direction: column; gap: 8px; max-height: 55vh; overflow-y: auto; }
+.ta-myplans-card {
+  display: flex; align-items: center; gap: 10px; padding: 12px;
+  border: 1px solid var(--t-gray-200); border-radius: var(--t-radius-sm);
+  cursor: pointer; transition: border-color 0.2s;
+}
+.ta-myplans-card:hover { border-color: var(--t-primary); }
+.ta-myplans-card.selected { border-color: var(--t-primary); background: rgba(5,150,105,0.05); }
+.ta-myplans-card-check { flex-shrink: 0; width: 18px; height: 18px; accent-color: var(--t-primary); }
+.ta-myplans-card-info { flex: 1; min-width: 0; }
+.ta-myplans-card-title { font-weight: 600; font-size: 0.9rem; color: var(--t-gray-900); }
+.ta-myplans-card-meta { font-size: 0.78rem; color: var(--t-gray-500); margin-top: 2px; }
+.ta-myplans-card-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.ta-myplans-card-actions button {
+  padding: 4px 10px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; border: 1px solid var(--t-gray-300);
+  background: var(--t-white); color: var(--t-gray-600);
+}
+.ta-myplans-card-actions button:hover { border-color: var(--t-primary); color: var(--t-primary); }
+.ta-myplans-card-actions .ta-btn-delete:hover { border-color: #EF4444; color: #EF4444; }
+.ta-myplans-detail-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.ta-myplans-detail-header h2 { margin: 0; }
+.ta-myplans-detail-meta { font-size: 0.82rem; color: var(--t-gray-500); margin-bottom: 12px; }
+.ta-btn-back {
+  padding: 6px 12px; border: 1px solid var(--t-gray-300); border-radius: var(--t-radius-sm);
+  background: var(--t-white); cursor: pointer; font-size: 0.82rem; color: var(--t-gray-600);
+}
+.ta-btn-back:hover { border-color: var(--t-primary); color: var(--t-primary); }
+.ta-myplans-empty { text-align: center; padding: 40px 20px; color: var(--t-gray-500); font-size: 0.9rem; }
+
+/* Compare Plans */
+.ta-modal-compare { max-width: 900px; }
+.ta-compare-content { display: flex; gap: 12px; max-height: 60vh; overflow-y: auto; }
+.ta-compare-col {
+  flex: 1; min-width: 0; border: 1px solid var(--t-gray-200); border-radius: var(--t-radius-sm); overflow: hidden;
+}
+.ta-compare-col-header {
+  padding: 10px 12px; background: var(--t-gray-50); border-bottom: 1px solid var(--t-gray-200);
+}
+.ta-compare-col-header h3 { font-size: 0.88rem; margin: 0 0 4px; color: var(--t-gray-900); }
+.ta-compare-col-header .meta { font-size: 0.75rem; color: var(--t-gray-500); }
+.ta-compare-col-body {
+  padding: 12px; font-size: 0.82rem; line-height: 1.7; color: var(--t-gray-800);
+  max-height: 50vh; overflow-y: auto; white-space: pre-wrap;
+}
+.ta-compare-col-body h1, .ta-compare-col-body h2, .ta-compare-col-body h3 { margin: 12px 0 6px; }
+.ta-compare-col-body h1 { font-size: 1rem; }
+.ta-compare-col-body h2 { font-size: 0.92rem; }
+.ta-compare-col-body h3 { font-size: 0.85rem; }
+.ta-compare-col-body strong { color: var(--t-primary-dark); }
+.ta-compare-col-body ul, .ta-compare-col-body ol { padding-left: 16px; }
+.ta-compare-tabs { display: none; }
+.ta-compare-tab { padding: 8px 16px; border: none; background: none; cursor: pointer; font-size: 0.85rem; color: var(--t-gray-500); border-bottom: 2px solid transparent; }
+.ta-compare-tab.active { color: var(--t-primary); border-bottom-color: var(--t-primary); font-weight: 600; }
+
+/* Travel Tips */
+.ta-tips-btn {
+  display: block; width: calc(100% - 2.5rem); margin: 0 1.25rem 0.5rem; padding: 10px;
+  background: var(--t-gray-50); border: 1px solid var(--t-gray-200); border-radius: var(--t-radius-sm);
+  cursor: pointer; font-size: 0.85rem; color: var(--t-gray-700); text-align: center;
+  transition: border-color 0.2s, color 0.2s;
+}
+.ta-tips-btn:hover { border-color: var(--t-primary); color: var(--t-primary); }
+.ta-modal-tips { max-width: 520px; }
+.ta-tips-content { max-height: 60vh; overflow-y: auto; }
+.ta-tips-section { margin-bottom: 20px; }
+.ta-tips-section h3 { font-size: 0.92rem; color: var(--t-primary-dark); margin-bottom: 8px; border-bottom: 1px solid var(--t-gray-100); padding-bottom: 6px; }
+.ta-tips-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 8px; }
+.ta-tips-table td { padding: 6px 8px; border-bottom: 1px solid var(--t-gray-100); }
+.ta-tips-table td:first-child { font-weight: 600; color: var(--t-gray-800); white-space: nowrap; width: 40%; }
+.ta-tips-table td:last-child { color: var(--t-gray-600); }
+.ta-tips-list { list-style: none; padding: 0; margin: 0; }
+.ta-tips-list li { padding: 6px 0; font-size: 0.82rem; color: var(--t-gray-700); border-bottom: 1px solid var(--t-gray-50); line-height: 1.5; }
+.ta-tips-list li:last-child { border-bottom: none; }
+.ta-tips-updated { font-size: 0.75rem; color: var(--t-gray-400); text-align: right; margin-top: 12px; }
+
 /* Toast notification */
 .ta-toast {
   position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
@@ -551,6 +635,10 @@ body {
   .ta-spot-thumb { width: 64px; height: 64px; }
   .ta-detail-images img { height: 180px; }
   .ta-modal { max-height: 95vh; }
+  .ta-compare-content { flex-direction: column; }
+  .ta-compare-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--t-gray-200); margin-bottom: 8px; }
+  .ta-compare-col { display: none; }
+  .ta-compare-col.active { display: block; }
 }
 
 @media (max-width: 480px) {

@@ -121,6 +121,7 @@
                 <div class="ta-auth-name" id="ta-auth-name"></div>
                 <button onclick="taShowMySpots()" data-i18n="bookmark.mySpots">My Spots</button>
                 <button onclick="taShowPlanner()" data-i18n="planner.btn">Plan Trip</button>
+                <button onclick="taShowMyPlans()" data-i18n="planner.myPlans">My Plans</button>
                 <button onclick="taSignOut()" data-i18n="auth.signOut">Sign Out</button>
               </div>
             </div>
@@ -204,6 +205,9 @@
           <div id="ta-detail-by" class="ta-detail-by"></div>
         </div>
       </div>
+
+      <!-- Tips Button -->
+      <button class="ta-tips-btn" onclick="taShowTips()" data-i18n="tips.btn">Travel Tips</button>
 
       <!-- Footer -->
       <div class="ta-footer" id="ta-footer">
@@ -321,6 +325,7 @@
         <div id="ta-planner-result" class="ta-planner-result"></div>
         <div class="ta-form-actions">
           <button type="button" class="ta-btn-secondary" onclick="taClosePlanner()" data-i18n="planner.close">Close</button>
+          <button type="button" class="ta-btn-save" onclick="taSaveCurrentPlan()" data-i18n="planner.save">Save Plan</button>
           <button type="button" class="ta-btn-primary" onclick="taPlannerBackToForm()" data-i18n="planner.retry">Generate Again</button>
         </div>
       </div>
@@ -329,6 +334,55 @@
           <div class="ta-spinner"></div>
           <p data-i18n="planner.generating">Creating your travel plan...</p>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- My Plans Modal -->
+  <div class="ta-modal-overlay" id="ta-myplans-overlay">
+    <div class="ta-modal ta-modal-planner">
+      <div id="ta-myplans-list-view">
+        <h2 data-i18n="planner.myPlans">My Plans</h2>
+        <p class="ta-modal-notice ta-myplans-notice" data-i18n="planner.savedLocal">Saved on this device</p>
+        <div id="ta-myplans-list" class="ta-myplans-list"></div>
+        <div class="ta-form-actions">
+          <button type="button" class="ta-btn-secondary" onclick="taCloseMyPlans()" data-i18n="planner.close">Close</button>
+          <button type="button" class="ta-btn-primary" id="ta-compare-btn" onclick="taComparePlans()" style="display:none" data-i18n="planner.compare">Compare</button>
+        </div>
+      </div>
+      <div id="ta-myplans-detail-view" style="display:none">
+        <div class="ta-myplans-detail-header">
+          <button type="button" class="ta-btn-back" onclick="taMyPlansBack()">← <span data-i18n="planner.back">Back</span></button>
+          <h2 id="ta-myplans-detail-title"></h2>
+        </div>
+        <div id="ta-myplans-detail-meta" class="ta-myplans-detail-meta"></div>
+        <div id="ta-myplans-detail-content" class="ta-planner-result"></div>
+        <div class="ta-form-actions">
+          <button type="button" class="ta-btn-secondary" onclick="taCloseMyPlans()" data-i18n="planner.close">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compare Plans Modal -->
+  <div class="ta-modal-overlay" id="ta-compare-overlay">
+    <div class="ta-modal ta-modal-compare">
+      <h2 data-i18n="planner.comparePlans">Compare Plans</h2>
+      <div id="ta-compare-content" class="ta-compare-content"></div>
+      <div class="ta-form-actions">
+        <button type="button" class="ta-btn-secondary" onclick="taCloseCompare()" data-i18n="planner.close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Travel Tips Modal -->
+  <div class="ta-modal-overlay" id="ta-tips-overlay">
+    <div class="ta-modal ta-modal-tips">
+      <h2 data-i18n="tips.title">Korea Travel Tips</h2>
+      <div class="ta-tips-content" id="ta-tips-content"></div>
+      <p class="ta-tips-updated" data-i18n="tips.lastUpdated">Last updated: Jan 2026</p>
+      <div class="ta-form-actions">
+        <button type="button" class="ta-btn-secondary" onclick="taCloseTips()" data-i18n="planner.close">Close</button>
       </div>
     </div>
   </div>

@@ -1291,6 +1291,15 @@
     var budget = budgetBtn ? budgetBtn.dataset.val : 'moderate';
     var style = styleBtn ? styleBtn.dataset.val : 'balanced';
 
+    // Capture plan metadata for save feature
+    _lastPlanData = {
+      days: days,
+      budget: budget,
+      style: style,
+      spotNames: selectedSpots.map(function(s) { return s.name; }),
+      lang: state.lang
+    };
+
     // Show loading
     document.getElementById('ta-planner-form-view').style.display = 'none';
     document.getElementById('ta-planner-result-view').style.display = 'none';
@@ -1365,6 +1374,228 @@
       .replace(/\n{2,}/g, '</p><p>')
       .replace(/\n/g, '<br>');
   }
+
+  // === Plan Save & Compare ===
+  var _lastPlanData = null; // stores data from last generated plan
+
+  // _lastPlanData is set inside taGeneratePlan before API call
+
+  window.taSaveCurrentPlan = function() {
+    var resultEl = document.getElementById('ta-planner-result');
+    if (!resultEl || !resultEl.innerHTML || !_lastPlanData) {
+      showToast('No plan to save');
+      return;
+    }
+
+    // Get the raw markdown from the rendered HTML (use stored text)
+    var planMarkdown = resultEl.innerText || resultEl.textContent;
+
+    var plan = {
+      id: 'plan_' + Date.now(),
+      createdAt: new Date().toISOString(),
+      title: t('planner.planTitle').replace('{days}', _lastPlanData.days),
+      days: _lastPlanData.days,
+      budget: _lastPlanData.budget,
+      style: _lastPlanData.style,
+      spotNames: _lastPlanData.spotNames,
+      planHtml: resultEl.innerHTML,
+      lang: _lastPlanData.lang
+    };
+
+    var plans = getSavedPlans();
+    plans.unshift(plan);
+    if (plans.length > 30) plans = plans.slice(0, 30);
+    localStorage.setItem('travelko_saved_plans', JSON.stringify(plans));
+
+    showToast(t('planner.saved'));
+    syncPlansToNotion(plans);
+  };
+
+  function getSavedPlans() {
+    try {
+      return JSON.parse(localStorage.getItem('travelko_saved_plans') || '[]');
+    } catch(e) { return []; }
+  }
+
+  function syncPlansToNotion(plans) {
+    if (!state.authUser) return;
+    var meta = plans.map(function(p) {
+      return { id: p.id, title: p.title, days: p.days, createdAt: p.createdAt.substring(0, 10) };
+    });
+    var metaStr = JSON.stringify(meta);
+    if (metaStr.length > 1900) {
+      meta = meta.slice(0, 10);
+      metaStr = JSON.stringify(meta);
+    }
+    fetch('/api/user/bookmarks', {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify({ action: 'sync_plans', plans: metaStr })
+    }).catch(function() {});
+  }
+
+  window.taShowMyPlans = function() {
+    document.getElementById('ta-auth-profile').classList.remove('open');
+    var plans = getSavedPlans();
+    var listEl = document.getElementById('ta-myplans-list');
+
+    if (plans.length === 0) {
+      listEl.innerHTML = '<div class="ta-myplans-empty">' + t('planner.noSavedPlans') + '</div>';
+      document.getElementById('ta-compare-btn').style.display = 'none';
+    } else {
+      listEl.innerHTML = plans.map(function(plan) {
+        var date = plan.createdAt ? plan.createdAt.substring(0, 10) : '';
+        var spots = plan.spotNames ? plan.spotNames.slice(0, 3).join(', ') : '';
+        if (plan.spotNames && plan.spotNames.length > 3) spots += '...';
+        return '<div class="ta-myplans-card" data-plan-id="' + plan.id + '">' +
+          '<input type="checkbox" class="ta-myplans-card-check" data-plan-id="' + plan.id + '" onclick="event.stopPropagation(); taUpdateCompareBtn()">' +
+          '<div class="ta-myplans-card-info" onclick="taViewPlan(\'' + plan.id + '\')">' +
+            '<div class="ta-myplans-card-title">' + escapeHtml(plan.title) + '</div>' +
+            '<div class="ta-myplans-card-meta">' + date + ' · ' + (plan.budget || '') + ' · ' + spots + '</div>' +
+          '</div>' +
+          '<div class="ta-myplans-card-actions">' +
+            '<button class="ta-btn-delete" onclick="event.stopPropagation(); taDeletePlan(\'' + plan.id + '\')">' + t('planner.deletePlan') + '</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+      document.getElementById('ta-compare-btn').style.display = 'none';
+    }
+
+    document.getElementById('ta-myplans-list-view').style.display = '';
+    document.getElementById('ta-myplans-detail-view').style.display = 'none';
+    document.getElementById('ta-myplans-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.taCloseMyPlans = function() {
+    document.getElementById('ta-myplans-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
+  window.taViewPlan = function(planId) {
+    var plans = getSavedPlans();
+    var plan = plans.find(function(p) { return p.id === planId; });
+    if (!plan) return;
+
+    document.getElementById('ta-myplans-detail-title').textContent = plan.title;
+    document.getElementById('ta-myplans-detail-meta').textContent =
+      (plan.createdAt ? plan.createdAt.substring(0, 10) : '') + ' · ' +
+      (plan.budget || '') + ' · ' + (plan.style || '') + ' · ' +
+      t('planner.spots_count').replace('{n}', (plan.spotNames || []).length);
+    document.getElementById('ta-myplans-detail-content').innerHTML = plan.planHtml || '';
+
+    document.getElementById('ta-myplans-list-view').style.display = 'none';
+    document.getElementById('ta-myplans-detail-view').style.display = '';
+  };
+
+  window.taMyPlansBack = function() {
+    document.getElementById('ta-myplans-list-view').style.display = '';
+    document.getElementById('ta-myplans-detail-view').style.display = 'none';
+  };
+
+  window.taDeletePlan = function(planId) {
+    var plans = getSavedPlans().filter(function(p) { return p.id !== planId; });
+    localStorage.setItem('travelko_saved_plans', JSON.stringify(plans));
+    taShowMyPlans();
+  };
+
+  window.taUpdateCompareBtn = function() {
+    var checked = document.querySelectorAll('.ta-myplans-card-check:checked');
+    var btn = document.getElementById('ta-compare-btn');
+    btn.style.display = checked.length >= 2 ? '' : 'none';
+    btn.textContent = t('planner.compare') + ' (' + checked.length + ')';
+  };
+
+  window.taComparePlans = function() {
+    var checked = document.querySelectorAll('.ta-myplans-card-check:checked');
+    var plans = getSavedPlans();
+    var selectedPlans = [];
+    checked.forEach(function(cb) {
+      var p = plans.find(function(plan) { return plan.id === cb.dataset.planId; });
+      if (p) selectedPlans.push(p);
+    });
+    if (selectedPlans.length < 2) return;
+    if (selectedPlans.length > 3) selectedPlans = selectedPlans.slice(0, 3);
+
+    var contentEl = document.getElementById('ta-compare-content');
+    // Mobile tabs
+    var tabsHtml = '<div class="ta-compare-tabs">' +
+      selectedPlans.map(function(p, i) {
+        return '<button class="ta-compare-tab' + (i === 0 ? ' active' : '') + '" onclick="taCompareTab(' + i + ')">' + escapeHtml(p.title) + '</button>';
+      }).join('') + '</div>';
+
+    var colsHtml = selectedPlans.map(function(plan, i) {
+      var date = plan.createdAt ? plan.createdAt.substring(0, 10) : '';
+      return '<div class="ta-compare-col' + (i === 0 ? ' active' : '') + '" data-col="' + i + '">' +
+        '<div class="ta-compare-col-header">' +
+          '<h3>' + escapeHtml(plan.title) + '</h3>' +
+          '<div class="meta">' + date + ' · ' + (plan.budget || '') + ' · ' + (plan.style || '') + '</div>' +
+        '</div>' +
+        '<div class="ta-compare-col-body">' + (plan.planHtml || '') + '</div>' +
+      '</div>';
+    }).join('');
+
+    contentEl.innerHTML = tabsHtml + colsHtml;
+
+    taCloseMyPlans();
+    document.getElementById('ta-compare-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.taCompareTab = function(idx) {
+    document.querySelectorAll('.ta-compare-tab').forEach(function(t, i) {
+      t.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.ta-compare-col').forEach(function(c, i) {
+      c.classList.toggle('active', i === idx);
+    });
+  };
+
+  window.taCloseCompare = function() {
+    document.getElementById('ta-compare-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
+  // === Travel Tips ===
+  window.taShowTips = function() {
+    var content = document.getElementById('ta-tips-content');
+    content.innerHTML =
+      '<div class="ta-tips-section">' +
+        '<h3>' + t('tips.transport') + '</h3>' +
+        '<table class="ta-tips-table">' +
+          '<tr><td>' + t('tips.subway') + '</td><td>₩1,400 (' + t('tips.baseFare') + ', T-money) · ' + t('tips.distanceBased') + '</td></tr>' +
+          '<tr><td>' + t('tips.bus') + '</td><td>₩1,500</td></tr>' +
+          '<tr><td>' + t('tips.taxi') + '</td><td>₩4,800 (' + t('tips.baseFare') + ') · ' + t('tips.lateNight') + '</td></tr>' +
+          '<tr><td>' + t('tips.ktx') + '</td><td>Seoul↔Busan ₩59,800 · Seoul↔Daejeon ₩23,700</td></tr>' +
+          '<tr><td>' + t('tips.airport') + '</td><td>Incheon↔Seoul ₩9,500 (Express)</td></tr>' +
+        '</table>' +
+      '</div>' +
+      '<div class="ta-tips-section">' +
+        '<h3>' + t('tips.meals') + '</h3>' +
+        '<table class="ta-tips-table">' +
+          '<tr><td>' + t('tips.budget') + '</td><td>~₩10,000 · ' + t('tips.budgetDesc') + '</td></tr>' +
+          '<tr><td>' + t('tips.moderate') + '</td><td>₩10,000~30,000 · ' + t('tips.moderateDesc') + '</td></tr>' +
+          '<tr><td>' + t('tips.luxury') + '</td><td>₩30,000+ · ' + t('tips.luxuryDesc') + '</td></tr>' +
+        '</table>' +
+      '</div>' +
+      '<div class="ta-tips-section">' +
+        '<h3>' + t('tips.useful') + '</h3>' +
+        '<ul class="ta-tips-list">' +
+          '<li>💳 ' + t('tips.tmoney') + '</li>' +
+          '<li>🙅 ' + t('tips.tipping') + '</li>' +
+          '<li>🏧 ' + t('tips.atm') + '</li>' +
+          '<li>🚨 ' + t('tips.emergency') + '</li>' +
+        '</ul>' +
+      '</div>';
+
+    document.getElementById('ta-tips-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.taCloseTips = function() {
+    document.getElementById('ta-tips-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  };
 
   // === Filters ===
   function initFilters() {
