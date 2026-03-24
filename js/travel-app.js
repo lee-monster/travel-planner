@@ -37,18 +37,21 @@
     // Bookmarks: [{spotId, type}]
     bookmarks: [],
     activeTab: 'explore',
+    muslimMode: false,
     // Cache all loaded spots by id for bookmark lookup across filters
     spotCache: {}
   };
 
   var CAT_ICONS = {
     food: '🍜', attraction: '🏛️', cafe: '☕',
-    nature: '🌿', shopping: '🛍️', nightlife: '🌙'
+    nature: '🌿', shopping: '🛍️', nightlife: '🌙',
+    halal: '🥘', mosque: '🕌', vegetarian: '🥗'
   };
 
   var CAT_COLORS = {
     food: '#EF4444', attraction: '#3B82F6', cafe: '#F59E0B',
-    nature: '#22C55E', shopping: '#8B5CF6', nightlife: '#EC4899'
+    nature: '#22C55E', shopping: '#8B5CF6', nightlife: '#EC4899',
+    halal: '#059669', mosque: '#0891B2', vegetarian: '#65A30D'
   };
 
   // === Map Providers Abstraction ===
@@ -667,7 +670,11 @@
     var params = new URLSearchParams();
     params.set('lang', state.lang);
     params.set('limit', '100');
-    if (state.category !== 'all') params.set('category', state.category);
+    if (state.muslimMode) {
+      params.set('category', 'halal,mosque');
+    } else if (state.category !== 'all') {
+      params.set('category', state.category);
+    }
     if (state.region) params.set('region', state.region);
     if (append && state.nextCursor) params.set('cursor', state.nextCursor);
 
@@ -1884,10 +1891,39 @@
     document.body.style.overflow = '';
   };
 
+  // === Muslim Toggle ===
+  window.taToggleMuslim = function() {
+    var toggle = document.getElementById('ta-muslim-toggle');
+    state.muslimMode = toggle.checked;
+
+    var catRow = document.getElementById('ta-cat-row');
+    var muslimDesc = document.getElementById('ta-muslim-desc');
+    var vegBtn = document.querySelector('.ta-cat-btn[data-cat="vegetarian"]');
+
+    if (state.muslimMode) {
+      catRow.style.opacity = '0.3';
+      catRow.style.pointerEvents = 'none';
+      if (vegBtn) vegBtn.style.display = 'none';
+      muslimDesc.style.display = '';
+      state.category = 'all';
+      document.querySelectorAll('.ta-cat-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.cat === 'all');
+      });
+    } else {
+      catRow.style.opacity = '';
+      catRow.style.pointerEvents = '';
+      if (vegBtn) vegBtn.style.display = '';
+      muslimDesc.style.display = 'none';
+    }
+    state.nextCursor = null;
+    fetchSpots(false);
+  };
+
   // === Filters ===
   function initFilters() {
     document.querySelectorAll('.ta-cat-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
+        if (state.muslimMode) return;
         document.querySelectorAll('.ta-cat-btn').forEach(function(b) { b.classList.remove('active'); });
         btn.classList.add('active');
         state.category = btn.dataset.cat;

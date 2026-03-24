@@ -33,6 +33,8 @@ const LANG_FIELDS = {
   ko: { name: 'Name_ko', desc: 'Description_ko' },
   id: { name: 'Name_id', desc: 'Description_id' },
   mn: { name: 'Name_mn', desc: 'Description_mn' },
+  ms: { name: 'Name_id', desc: 'Description_id' },  // Malay falls back to Indonesian (similar language)
+  vi: { name: 'Name', desc: 'Description' },          // Vietnamese falls back to English
 };
 
 function formatSpot(page, lang) {
@@ -90,7 +92,15 @@ module.exports = async function handler(req, res) {
     };
 
     if (category) {
-      filter.and.push({ property: 'Category', select: { equals: category } });
+      // Support comma-separated categories for multi-category filtering (e.g., muslim toggle)
+      const cats = category.split(',').map(c => c.trim()).filter(Boolean);
+      if (cats.length === 1) {
+        filter.and.push({ property: 'Category', select: { equals: cats[0] } });
+      } else if (cats.length > 1) {
+        filter.and.push({
+          or: cats.map(c => ({ property: 'Category', select: { equals: c } }))
+        });
+      }
     }
     if (region) {
       filter.and.push({ property: 'Region', select: { equals: region } });

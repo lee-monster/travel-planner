@@ -674,36 +674,164 @@ body {
 .cat-nature { background: #F0FDF4; color: #22C55E; }
 .cat-shopping { background: #F5F3FF; color: #8B5CF6; }
 .cat-nightlife { background: #FDF2F8; color: #EC4899; }
+.cat-halal { background: #ECFDF5; color: #059669; }
+.cat-mosque { background: #ECFEFF; color: #0891B2; }
+.cat-vegetarian { background: #F7FEE7; color: #65A30D; }
+
+/* === Muslim Friendly Toggle === */
+.ta-muslim-toggle-wrap {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.ta-muslim-label {
+  display: flex; align-items: center; gap: 6px; cursor: pointer;
+  font-size: 0.78rem; font-weight: 600; color: var(--t-gray-700);
+  user-select: none;
+}
+.ta-muslim-label input[type="checkbox"] {
+  display: none;
+}
+.ta-muslim-switch {
+  width: 36px; height: 20px; background: var(--t-gray-200);
+  border-radius: 10px; position: relative; transition: background 0.2s;
+  flex-shrink: 0;
+}
+.ta-muslim-switch::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px; background: white; border-radius: 50%;
+  transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.ta-muslim-label input:checked + .ta-muslim-switch {
+  background: #059669;
+}
+.ta-muslim-label input:checked + .ta-muslim-switch::after {
+  transform: translateX(16px);
+}
+.ta-muslim-desc {
+  font-size: 0.72rem; color: #059669; font-weight: 500;
+  background: #ECFDF5; padding: 2px 8px; border-radius: 4px;
+}
 
 /* === Mobile Responsive === */
 @media (max-width: 768px) {
   .ta-koinfo-link { display: none; }
   .ta-layout { flex-direction: column-reverse; }
   .ta-sidebar {
-    width: 100%; height: 45vh; border-right: none;
-    border-top: 1px solid var(--t-gray-200);
+    width: 100%; height: 50vh; border-right: none;
+    border-top: 2px solid var(--t-gray-200);
+    position: relative;
   }
-  .ta-map-wrap { height: 55vh; }
+  .ta-map-wrap { height: 50vh; }
   .ta-sidebar-toggle { display: none; }
   .ta-layout.sidebar-collapsed .ta-sidebar {
     width: 100%; opacity: 1; border-right: none;
   }
-  .ta-fab { bottom: calc(45vh + 12px); right: 12px; padding: 12px 18px; font-size: 0.85rem; }
-  .ta-spot-thumb { width: 64px; height: 64px; }
-  .ta-detail-images img { height: 180px; }
-  .ta-modal { max-height: 95vh; }
+
+  /* Drag handle indicator */
+  .ta-sidebar::before {
+    content: ''; display: block; width: 40px; height: 4px;
+    background: var(--t-gray-300); border-radius: 2px;
+    margin: 6px auto 2px; flex-shrink: 0;
+  }
+
+  /* Better top bar on mobile */
+  .ta-topbar { height: 44px; padding: 0 10px; }
+  .ta-brand-logo { height: 28px; }
+
+  /* Category row: horizontal scroll on mobile */
+  .ta-cat-row {
+    flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; padding-bottom: 2px;
+  }
+  .ta-cat-row::-webkit-scrollbar { display: none; }
+  .ta-cat-btn { flex-shrink: 0; padding: 6px 12px; font-size: 0.78rem; }
+
+  /* Filter area compact */
+  .ta-filters { padding: 6px 10px; gap: 6px; }
+  .ta-muslim-toggle-wrap { gap: 6px; }
+
+  /* Better touch targets for spot cards */
+  .ta-spot-card { padding: 10px; gap: 10px; min-height: 44px; }
+  .ta-spot-thumb { width: 60px; height: 60px; }
+  .ta-spot-name { font-size: 0.88rem; }
+
+  /* Search */
+  .ta-search-wrap { padding: 6px 10px 0; }
+  .ta-search { padding: 10px 14px 10px 36px; font-size: 0.9rem; }
+
+  /* Detail panel full height on mobile */
+  .ta-detail-images img { height: 200px; }
+  .ta-detail-body { padding: 12px; }
+  .ta-detail-body h2 { font-size: 1.1rem; }
+  .ta-detail-bookmarks { flex-wrap: wrap; }
+  .ta-bookmark-btn { padding: 8px 12px; font-size: 0.8rem; }
+  .ta-detail-back { padding: 10px 12px; min-height: 44px; }
+
+  /* FAB position */
+  .ta-fab { bottom: calc(50vh + 12px); right: 12px; padding: 12px 18px; font-size: 0.85rem; }
+
+  /* Modals: near full-screen on mobile */
+  .ta-modal-overlay { padding: 8px; }
+  .ta-modal {
+    max-height: 96vh; border-radius: 12px;
+    max-width: 100%;
+  }
+  .ta-modal h2 { font-size: 1.1rem; }
+  .ta-modal-planner { max-width: 100%; }
+  .ta-modal-tips { max-width: 100%; }
+
+  /* Planner options better touch */
+  .ta-option-btn { padding: 8px 16px; font-size: 0.85rem; }
+  .ta-planner-days input[type="range"] { height: 28px; }
+
+  /* Share buttons wrap */
+  .ta-share-buttons { gap: 6px; }
+  .ta-share-btn { padding: 8px 12px; font-size: 0.78rem; }
+  .ta-share-url-row { flex-direction: column; }
+
+  /* Compare: mobile friendly */
   .ta-compare-content { flex-direction: column; }
   .ta-compare-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--t-gray-200); margin-bottom: 8px; }
   .ta-compare-col { display: none; }
   .ta-compare-col.active { display: block; }
+
+  /* Tabs better touch */
+  .ta-tab { padding: 12px 8px; font-size: 0.85rem; min-height: 44px; }
+
+  /* My spots better spacing */
+  .ta-myspot-item { padding: 10px 12px; min-height: 44px; }
+  .ta-myspot-remove { width: 28px; height: 28px; }
+
+  /* Form actions stacked on narrow screens */
+  .ta-form-actions { flex-wrap: wrap; }
+  .ta-btn-primary, .ta-btn-secondary, .ta-btn-save, .ta-btn-share {
+    padding: 10px 18px; font-size: 0.9rem;
+  }
+
+  /* Region select bigger */
+  .ta-region-select { padding: 8px 10px; font-size: 0.85rem; }
+
+  /* Footer compact */
+  .ta-footer { padding: 0.6rem 0.8rem; font-size: 0.72rem; }
+
+  /* Toast above sidebar */
+  .ta-toast { bottom: calc(50vh + 60px); font-size: 0.82rem; }
 }
 
 @media (max-width: 480px) {
-  .ta-brand-logo { height: 26px; }
-  .ta-search-wrap { padding: 8px 10px 0; }
-  .ta-sidebar { height: 40vh; }
-  .ta-map-wrap { height: 60vh; }
-  .ta-fab { bottom: calc(40vh + 8px); padding: 10px 16px; font-size: 0.82rem; }
+  .ta-sidebar { height: 55vh; }
+  .ta-map-wrap { height: 45vh; }
+  .ta-fab { bottom: calc(55vh + 8px); padding: 10px 16px; font-size: 0.82rem; }
+  .ta-toast { bottom: calc(55vh + 60px); }
+
+  /* Stack form actions vertically */
+  .ta-form-actions {
+    flex-direction: column;
+  }
+  .ta-form-actions button { width: 100%; }
+
+  /* Bookmark buttons stack */
+  .ta-detail-bookmarks { flex-direction: column; gap: 6px; }
+  .ta-bookmark-btn { justify-content: center; }
 }
 
 /* Footer */

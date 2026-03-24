@@ -144,6 +144,15 @@
       <!-- Explore Tab Content -->
       <div class="ta-tab-content active" id="ta-tab-explore">
         <div class="ta-filters">
+          <!-- Muslim Friendly Toggle -->
+          <div class="ta-muslim-toggle-wrap">
+            <label class="ta-muslim-label" for="ta-muslim-toggle">
+              <input type="checkbox" id="ta-muslim-toggle" onchange="taToggleMuslim()">
+              <span class="ta-muslim-switch"></span>
+              <span data-i18n="app.muslimToggle">Muslim Friendly</span>
+            </label>
+            <span class="ta-muslim-desc" id="ta-muslim-desc" style="display:none" data-i18n="app.muslimDesc">Showing halal restaurants & mosques</span>
+          </div>
           <div class="ta-cat-row" id="ta-cat-row">
             <button class="ta-cat-btn active" data-cat="all" data-i18n="app.catAll">All</button>
             <button class="ta-cat-btn" data-cat="food" data-i18n="app.catFood">Food</button>
@@ -152,6 +161,7 @@
             <button class="ta-cat-btn" data-cat="nature" data-i18n="app.catNature">Nature</button>
             <button class="ta-cat-btn" data-cat="shopping" data-i18n="app.catShopping">Shopping</button>
             <button class="ta-cat-btn" data-cat="nightlife" data-i18n="app.catNightlife">Nightlife</button>
+            <button class="ta-cat-btn" data-cat="vegetarian" data-i18n="app.catVegetarian">Vegetarian</button>
           </div>
           <select class="ta-region-select" id="ta-region-select">
             <option value="" data-i18n="app.regionAll">All Regions</option>
@@ -255,6 +265,9 @@
             <option value="nature" data-i18n="app.catNature">Nature</option>
             <option value="shopping" data-i18n="app.catShopping">Shopping</option>
             <option value="nightlife" data-i18n="app.catNightlife">Nightlife</option>
+            <option value="halal" data-i18n="app.catHalal">Halal Food</option>
+            <option value="mosque" data-i18n="app.catMosque">Mosque</option>
+            <option value="vegetarian" data-i18n="app.catVegetarian">Vegetarian</option>
           </select>
         </div>
         <div class="ta-form-group">
