@@ -670,11 +670,13 @@
     var params = new URLSearchParams();
     params.set('lang', state.lang);
     params.set('limit', '100');
-    if (state.muslimMode) {
-      params.set('category', 'halal,mosque');
+    if (state.muslimMode && state.category !== 'all') {
+      // Muslim mode + specific category: show that category + halal + mosque
+      params.set('category', state.category + ',halal,mosque');
     } else if (state.category !== 'all') {
       params.set('category', state.category);
     }
+    // Muslim mode + "all": no category filter needed (all spots including halal/mosque shown)
     if (state.region) params.set('region', state.region);
     if (append && state.nextCursor) params.set('cursor', state.nextCursor);
 
@@ -1896,25 +1898,9 @@
     var toggle = document.getElementById('ta-muslim-toggle');
     state.muslimMode = toggle.checked;
 
-    var catRow = document.getElementById('ta-cat-row');
     var muslimDesc = document.getElementById('ta-muslim-desc');
-    var vegBtn = document.querySelector('.ta-cat-btn[data-cat="vegetarian"]');
+    muslimDesc.style.display = state.muslimMode ? '' : 'none';
 
-    if (state.muslimMode) {
-      catRow.style.opacity = '0.3';
-      catRow.style.pointerEvents = 'none';
-      if (vegBtn) vegBtn.style.display = 'none';
-      muslimDesc.style.display = '';
-      state.category = 'all';
-      document.querySelectorAll('.ta-cat-btn').forEach(function(b) {
-        b.classList.toggle('active', b.dataset.cat === 'all');
-      });
-    } else {
-      catRow.style.opacity = '';
-      catRow.style.pointerEvents = '';
-      if (vegBtn) vegBtn.style.display = '';
-      muslimDesc.style.display = 'none';
-    }
     state.nextCursor = null;
     fetchSpots(false);
   };
@@ -1923,7 +1909,6 @@
   function initFilters() {
     document.querySelectorAll('.ta-cat-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        if (state.muslimMode) return;
         document.querySelectorAll('.ta-cat-btn').forEach(function(b) { b.classList.remove('active'); });
         btn.classList.add('active');
         state.category = btn.dataset.cat;
