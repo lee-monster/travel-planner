@@ -98,6 +98,10 @@
   <div class="ta-layout">
     <!-- Sidebar -->
     <aside class="ta-sidebar" id="ta-sidebar">
+      <!-- Drag handle for mobile bottom sheet -->
+      <div class="ta-drag-handle" id="ta-drag-handle">
+        <div class="ta-drag-handle-bar"></div>
+      </div>
       <!-- Header inside sidebar -->
       <header class="ta-topbar">
         <a href="/" class="ta-brand">
@@ -153,6 +157,7 @@
             </label>
             <span class="ta-muslim-desc" id="ta-muslim-desc" style="display:none" data-i18n="app.muslimDesc">Showing halal restaurants & mosques</span>
           </div>
+          <div class="ta-cat-row-wrap" id="ta-cat-row-wrap">
           <div class="ta-cat-row" id="ta-cat-row">
             <button class="ta-cat-btn active" data-cat="all" data-i18n="app.catAll">All</button>
             <button class="ta-cat-btn" data-cat="food" data-i18n="app.catFood">Food</button>
@@ -162,6 +167,7 @@
             <button class="ta-cat-btn" data-cat="shopping" data-i18n="app.catShopping">Shopping</button>
             <button class="ta-cat-btn" data-cat="nightlife" data-i18n="app.catNightlife">Nightlife</button>
             <button class="ta-cat-btn" data-cat="vegetarian" data-i18n="app.catVegetarian">Vegetarian</button>
+          </div>
           </div>
           <select class="ta-region-select" id="ta-region-select">
             <option value="" data-i18n="app.regionAll">All Regions</option>
@@ -243,12 +249,19 @@
     </div>
   </div>
 
+  <!-- View Toggle FAB (mobile) -->
+  <button class="ta-view-toggle" id="ta-view-toggle" onclick="taToggleView()">
+    <svg id="ta-view-toggle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+    <span id="ta-view-toggle-text" data-i18n="app.viewMap">Map</span>
+  </button>
+
   <!-- FAB -->
   <button class="ta-fab" id="ta-fab" onclick="taShowSubmit()" data-i18n="app.shareSpot">Share a Spot</button>
 
   <!-- Submit Modal -->
   <div class="ta-modal-overlay" id="ta-submit-overlay">
     <div class="ta-modal">
+      <button class="ta-modal-close" onclick="taCloseSubmit()" aria-label="Close">&times;</button>
       <h2 data-i18n="app.submitTitle">Share a Travel Spot</h2>
       <p class="ta-modal-notice" data-i18n="app.submitNotice">Your submission will appear after admin review.</p>
       <form id="ta-submit-form" onsubmit="taSubmitSpot(event)">
@@ -297,6 +310,7 @@
   <!-- Planner Modal -->
   <div class="ta-modal-overlay" id="ta-planner-overlay">
     <div class="ta-modal ta-modal-planner">
+      <button class="ta-modal-close" onclick="taClosePlanner()" aria-label="Close">&times;</button>
       <div id="ta-planner-form-view">
         <h2 data-i18n="planner.title">AI Travel Planner</h2>
         <p class="ta-modal-notice" data-i18n="planner.desc">Plan your trip based on your saved spots</p>
@@ -356,6 +370,7 @@
   <!-- My Plans Modal -->
   <div class="ta-modal-overlay" id="ta-myplans-overlay">
     <div class="ta-modal ta-modal-planner">
+      <button class="ta-modal-close" onclick="taCloseMyPlans()" aria-label="Close">&times;</button>
       <div id="ta-myplans-list-view">
         <h2 data-i18n="planner.myPlans">My Plans</h2>
         <p class="ta-modal-notice ta-myplans-notice" data-i18n="planner.savedLocal">Saved on this device</p>
@@ -384,6 +399,7 @@
   <!-- Compare Plans Modal -->
   <div class="ta-modal-overlay" id="ta-compare-overlay">
     <div class="ta-modal ta-modal-compare">
+      <button class="ta-modal-close" onclick="taCloseCompare()" aria-label="Close">&times;</button>
       <h2 data-i18n="planner.comparePlans">Compare Plans</h2>
       <div id="ta-compare-content" class="ta-compare-content"></div>
       <div class="ta-form-actions">
@@ -395,6 +411,7 @@
   <!-- Travel Tips Modal -->
   <div class="ta-modal-overlay" id="ta-tips-overlay">
     <div class="ta-modal ta-modal-tips">
+      <button class="ta-modal-close" onclick="taCloseTips()" aria-label="Close">&times;</button>
       <h2 data-i18n="tips.title">Korea Travel Tips</h2>
       <div class="ta-tips-content" id="ta-tips-content"></div>
       <p class="ta-tips-updated" data-i18n="tips.lastUpdated">Last updated: Jan 2026</p>

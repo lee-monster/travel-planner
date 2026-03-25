@@ -803,6 +803,11 @@
     document.querySelectorAll('.ta-spot-card').forEach(function(c) { c.classList.remove('active'); });
     var card = document.querySelector('.ta-spot-card[data-id="' + spot.id + '"]');
     if (card) card.classList.add('active');
+
+    // Auto-expand bottom sheet on mobile
+    if (bottomSheet && isMobileView() && bottomSheet.currentSnap !== 'full') {
+      setSnap('full');
+    }
   }
 
   function renderDetail(spot) {
@@ -933,6 +938,11 @@
     }
 
     document.querySelectorAll('.ta-spot-card').forEach(function(c) { c.classList.remove('active'); });
+
+    // Restore bottom sheet snap on mobile
+    if (bottomSheet && isMobileView()) {
+      setSnap(bottomSheet.prevSnap === 'full' ? 'half' : (bottomSheet.prevSnap || 'half'));
+    }
   };
 
   // === Map ===
@@ -2012,6 +2022,252 @@
     }
   };
 
+  // === Mobile Bottom Sheet ===
+  var bottomSheet = {
+    isMobile: false,
+    currentSnap: 'half',
+    prevSnap: 'half',
+    startY: 0,
+    startHeight: 0,
+    isDragging: false
+  };
+
+  function isMobileView() {
+    return window.innerWidth <= 768;
+  }
+
+  function initBottomSheet() {
+    var sidebar = document.getElementById('ta-sidebar');
+    var handle = document.getElementById('ta-drag-handle');
+    if (!handle || !sidebar) return;
+
+    // Touch events on drag handle
+    handle.addEventListener('touchstart', onDragStart, { passive: false });
+    document.addEventListener('touchmove', onDragMove, { passive: false });
+    document.addEventListener('touchend', onDragEnd);
+
+    // Mouse events for testing
+    handle.addEventListener('mousedown', onDragStart);
+    document.addEventListener('mousemove', onDragMove);
+    document.addEventListener('mouseup', onDragEnd);
+
+    // Set initial state
+    if (isMobileView()) {
+      bottomSheet.isMobile = true;
+      setSnap('half');
+    }
+
+    // Handle resize
+    window.addEventListener('resize', function() {
+      var wasMobile = bottomSheet.isMobile;
+      bottomSheet.isMobile = isMobileView();
+      if (bottomSheet.isMobile && !wasMobile) {
+        setSnap('half');
+      } else if (!bottomSheet.isMobile && wasMobile) {
+        sidebar.style.height = '';
+        sidebar.className = sidebar.className.replace(/\bsnap-\w+/g, '').trim();
+      }
+    });
+  }
+
+  function onDragStart(e) {
+    if (!isMobileView()) return;
+    var sidebar = document.getElementById('ta-sidebar');
+    bottomSheet.isDragging = true;
+    bottomSheet.startY = e.touches ? e.touches[0].clientY : e.clientY;
+    bottomSheet.startHeight = sidebar.offsetHeight;
+    sidebar.classList.add('dragging');
+    e.preventDefault();
+  }
+
+  function onDragMove(e) {
+    if (!bottomSheet.isDragging) return;
+    var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    var deltaY = bottomSheet.startY - clientY;
+    var newHeight = bottomSheet.startHeight + deltaY;
+    var vh = window.innerHeight;
+    newHeight = Math.max(vh * 0.1, Math.min(vh * 0.9, newHeight));
+    var sidebar = document.getElementById('ta-sidebar');
+    sidebar.style.height = newHeight + 'px';
+    updateFabPosition(newHeight);
+    e.preventDefault();
+  }
+
+  function onDragEnd() {
+    if (!bottomSheet.isDragging) return;
+    bottomSheet.isDragging = false;
+    var sidebar = document.getElementById('ta-sidebar');
+    sidebar.classList.remove('dragging');
+    sidebar.style.height = '';
+
+    var currentHeight = sidebar.offsetHeight || (window.innerHeight * 0.5);
+    var vh = window.innerHeight;
+    var ratio = currentHeight / vh;
+
+    // Snap to closest point
+    if (ratio < 0.3) {
+      setSnap('peek');
+    } else if (ratio < 0.65) {
+      setSnap('half');
+    } else {
+      setSnap('full');
+    }
+  }
+
+  function setSnap(snap) {
+    var sidebar = document.getElementById('ta-sidebar');
+    sidebar.classList.remove('snap-peek', 'snap-half', 'snap-full');
+    sidebar.classList.add('snap-' + snap);
+    sidebar.style.height = '';
+    bottomSheet.prevSnap = bottomSheet.currentSnap;
+    bottomSheet.currentSnap = snap;
+    updateFabForSnap(snap);
+    updateViewToggle(snap);
+
+    // Trigger map resize
+    setTimeout(function() {
+      if (window._taTriggerResize) window._taTriggerResize();
+    }, 350);
+  }
+
+  function updateFabPosition(height) {
+    var fab = document.getElementById('ta-fab');
+    if (fab && isMobileView()) {
+      fab.style.bottom = (height + 12) + 'px';
+    }
+  }
+
+  function updateFabForSnap(snap) {
+    var fab = document.getElementById('ta-fab');
+    if (!fab || !isMobileView()) return;
+    fab.style.bottom = '';
+    var map = { peek: 'calc(15vh + 12px)', half: 'calc(50vh + 12px)', full: 'calc(85vh + 12px)' };
+    fab.style.bottom = map[snap] || 'calc(50vh + 12px)';
+  }
+
+  // === View Toggle (Map/List) ===
+  window.taToggleView = function() {
+    if (!isMobileView()) return;
+    if (bottomSheet.currentSnap === 'peek') {
+      setSnap('half');
+    } else {
+      setSnap('peek');
+    }
+  };
+
+  function updateViewToggle(snap) {
+    var btn = document.getElementById('ta-view-toggle');
+    var textEl = document.getElementById('ta-view-toggle-text');
+    var iconEl = document.getElementById('ta-view-toggle-icon');
+    if (!btn || !isMobileView()) return;
+
+    if (snap === 'peek') {
+      // Showing map, offer to show list
+      textEl.textContent = t('app.viewList') || 'List';
+      iconEl.innerHTML = '<line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>';
+      btn.style.bottom = 'calc(15vh + 12px)';
+    } else {
+      // Showing list, offer to show map
+      textEl.textContent = t('app.viewMap') || 'Map';
+      iconEl.innerHTML = '<path d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l5.447 2.724A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>';
+      var map = { half: 'calc(50vh + 12px)', full: 'calc(85vh + 12px)' };
+      btn.style.bottom = map[snap] || 'calc(50vh + 12px)';
+    }
+  }
+
+  // Detail/back hooks are added in showDetail/taBackToList directly
+
+  // === Search: auto-expand on focus ===
+  function initSearchAutoExpand() {
+    var searchInput = document.getElementById('ta-search');
+    if (!searchInput) return;
+    searchInput.addEventListener('focus', function() {
+      if (isMobileView() && bottomSheet.currentSnap !== 'full') {
+        setSnap('full');
+      }
+    });
+  }
+
+  // === Category scroll fade hint ===
+  function initCatScrollHint() {
+    var catRow = document.getElementById('ta-cat-row');
+    var catWrap = document.getElementById('ta-cat-row-wrap');
+    if (!catRow || !catWrap) return;
+
+    function checkScroll() {
+      var atEnd = catRow.scrollLeft + catRow.offsetWidth >= catRow.scrollWidth - 8;
+      if (atEnd) {
+        catWrap.classList.add('scrolled-end');
+      } else {
+        catWrap.classList.remove('scrolled-end');
+      }
+    }
+    catRow.addEventListener('scroll', checkScroll);
+    // Check initially after spots load
+    setTimeout(checkScroll, 500);
+  }
+
+  // === Modal swipe-to-close ===
+  function initModalSwipeClose() {
+    var overlays = document.querySelectorAll('.ta-modal-overlay');
+    overlays.forEach(function(overlay) {
+      var modal = overlay.querySelector('.ta-modal');
+      if (!modal) return;
+
+      var startY = 0, startScrollTop = 0, swiping = false;
+
+      modal.addEventListener('touchstart', function(e) {
+        startY = e.touches[0].clientY;
+        startScrollTop = modal.scrollTop;
+      }, { passive: true });
+
+      modal.addEventListener('touchmove', function(e) {
+        if (modal.scrollTop > 0) return; // Only swipe when at top
+        var deltaY = e.touches[0].clientY - startY;
+        if (deltaY > 10 && startScrollTop <= 0) {
+          swiping = true;
+          modal.style.transform = 'translateY(' + Math.min(deltaY, 300) + 'px)';
+          modal.style.transition = 'none';
+        }
+      }, { passive: true });
+
+      modal.addEventListener('touchend', function() {
+        if (!swiping) return;
+        var currentTransform = modal.style.transform;
+        var match = currentTransform.match(/translateY\((\d+)/);
+        var distance = match ? parseInt(match[1]) : 0;
+        modal.style.transition = '';
+        modal.style.transform = '';
+        swiping = false;
+        if (distance > 100) {
+          // Find and call the close function
+          var closeBtn = modal.querySelector('.ta-modal-close');
+          if (closeBtn) closeBtn.click();
+        }
+      });
+    });
+
+    // Close My Plans and Compare overlays on background click
+    var myplansOverlay = document.getElementById('ta-myplans-overlay');
+    if (myplansOverlay) {
+      myplansOverlay.addEventListener('click', function(e) {
+        if (e.target === e.currentTarget) taCloseMyPlans();
+      });
+    }
+    var compareOverlay = document.getElementById('ta-compare-overlay');
+    if (compareOverlay) {
+      compareOverlay.addEventListener('click', function(e) {
+        if (e.target === e.currentTarget) taCloseCompare();
+      });
+    }
+    var tipsOverlay = document.getElementById('ta-tips-overlay');
+    if (tipsOverlay) {
+      tipsOverlay.addEventListener('click', function(e) {
+        if (e.target === e.currentTarget) taCloseTips();
+      });
+    }
+  }
+
   // === Init ===
   function init() {
     initLanguage();
@@ -2021,6 +2277,10 @@
     initAuth();
     initMap();
     fetchSpots(false);
+    initBottomSheet();
+    initSearchAutoExpand();
+    initCatScrollHint();
+    initModalSwipeClose();
   }
 
   if (document.readyState === 'loading') {

@@ -711,33 +711,105 @@ body {
   background: #ECFDF5; padding: 2px 8px; border-radius: 4px;
 }
 
+/* === Mobile Bottom Sheet === */
+/* Drag handle hidden on desktop */
+.ta-drag-handle { display: none; }
+
+/* Map/List toggle FAB (mobile only) */
+.ta-view-toggle {
+  display: none; position: fixed; z-index: 60;
+  left: 50%; transform: translateX(-50%);
+  padding: 10px 20px; border: none; border-radius: 50px;
+  background: var(--t-gray-900); color: var(--t-white);
+  font-weight: 600; font-size: 0.82rem; cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  transition: opacity 0.2s, bottom 0.3s;
+  gap: 6px; align-items: center;
+}
+.ta-view-toggle svg { width: 16px; height: 16px; }
+
+/* Category scroll fade hint (mobile) */
+.ta-cat-row-wrap {
+  position: relative;
+}
+.ta-cat-row-wrap::after {
+  content: ''; display: none;
+  position: absolute; right: 0; top: 0; bottom: 0; width: 32px;
+  background: linear-gradient(to right, transparent, var(--t-white));
+  pointer-events: none; z-index: 1;
+}
+
+/* Modal close X button */
+.ta-modal-close {
+  position: absolute; top: 12px; right: 12px;
+  width: 32px; height: 32px; border: none; background: var(--t-gray-100);
+  border-radius: 50%; cursor: pointer; display: flex;
+  align-items: center; justify-content: center;
+  color: var(--t-gray-600); font-size: 1.1rem; transition: all 0.2s;
+  z-index: 5;
+}
+.ta-modal-close:hover { background: var(--t-gray-200); color: var(--t-gray-900); }
+
+/* Modal needs relative for close button positioning */
+.ta-modal { position: relative; }
+
 /* === Mobile Responsive === */
 @media (max-width: 768px) {
   .ta-koinfo-link { display: none; }
-  .ta-layout { flex-direction: column-reverse; }
+
+  /* Bottom sheet layout */
+  .ta-layout { flex-direction: column; position: relative; }
+  .ta-map-wrap { flex: 1; height: 100vh; min-height: 0; }
   .ta-sidebar {
-    width: 100%; height: 50vh; border-right: none;
-    border-top: 2px solid var(--t-gray-200);
-    position: relative;
+    width: 100%; border-right: none;
+    border-top: none;
+    position: fixed; bottom: 0; left: 0; right: 0;
+    z-index: 100;
+    height: 50vh;
+    transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.12);
+    will-change: height;
   }
-  .ta-map-wrap { height: 50vh; }
+  .ta-sidebar.dragging {
+    transition: none;
+  }
+  /* Snap states */
+  .ta-sidebar.snap-peek { height: 15vh; }
+  .ta-sidebar.snap-half { height: 50vh; }
+  .ta-sidebar.snap-full { height: 85vh; }
+
   .ta-sidebar-toggle { display: none; }
   .ta-layout.sidebar-collapsed .ta-sidebar {
     width: 100%; opacity: 1; border-right: none;
   }
 
-  /* Drag handle indicator */
-  .ta-sidebar::before {
-    content: ''; display: block; width: 40px; height: 4px;
-    background: var(--t-gray-300); border-radius: 2px;
-    margin: 6px auto 2px; flex-shrink: 0;
+  /* Drag handle */
+  .ta-drag-handle {
+    display: flex; align-items: center; justify-content: center;
+    padding: 8px 0 4px; cursor: grab; flex-shrink: 0;
+    touch-action: none;
   }
+  .ta-drag-handle:active { cursor: grabbing; }
+  .ta-drag-handle-bar {
+    width: 40px; height: 4px; background: var(--t-gray-300);
+    border-radius: 2px; transition: background 0.2s;
+  }
+  .ta-drag-handle:hover .ta-drag-handle-bar,
+  .ta-drag-handle:active .ta-drag-handle-bar {
+    background: var(--t-gray-600);
+  }
+
+  /* Hide old pseudo-element handle */
+  .ta-sidebar::before { display: none; }
 
   /* Better top bar on mobile */
   .ta-topbar { height: 44px; padding: 0 10px; }
   .ta-brand-logo { height: 28px; }
 
-  /* Category row: horizontal scroll on mobile */
+  /* Category row: horizontal scroll with fade hint */
+  .ta-cat-row-wrap::after { display: block; }
+  .ta-cat-row-wrap.scrolled-end::after { display: none; }
   .ta-cat-row {
     flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch;
     scrollbar-width: none; padding-bottom: 2px;
@@ -758,7 +830,7 @@ body {
   .ta-search-wrap { padding: 6px 10px 0; }
   .ta-search { padding: 10px 14px 10px 36px; font-size: 0.9rem; }
 
-  /* Detail panel full height on mobile */
+  /* Detail panel */
   .ta-detail-images img { height: 200px; }
   .ta-detail-body { padding: 12px; }
   .ta-detail-body h2 { font-size: 1.1rem; }
@@ -766,18 +838,37 @@ body {
   .ta-bookmark-btn { padding: 8px 12px; font-size: 0.8rem; }
   .ta-detail-back { padding: 10px 12px; min-height: 44px; }
 
-  /* FAB position */
-  .ta-fab { bottom: calc(50vh + 12px); right: 12px; padding: 12px 18px; font-size: 0.85rem; }
-
-  /* Modals: near full-screen on mobile */
-  .ta-modal-overlay { padding: 8px; }
-  .ta-modal {
-    max-height: 96vh; border-radius: 12px;
-    max-width: 100%;
+  /* FAB position above bottom sheet */
+  .ta-fab {
+    bottom: calc(50vh + 12px); right: 12px;
+    padding: 12px 18px; font-size: 0.85rem;
+    transition: bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .ta-modal h2 { font-size: 1.1rem; }
+
+  /* View toggle visible on mobile */
+  .ta-view-toggle { display: flex; }
+
+  /* Modals: full-screen style with swipe-to-close */
+  .ta-modal-overlay {
+    padding: 0; align-items: flex-end;
+  }
+  .ta-modal {
+    max-height: 92vh; border-radius: 16px 16px 0 0;
+    max-width: 100%; padding: 24px 20px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+  .ta-modal h2 { font-size: 1.1rem; padding-right: 36px; }
   .ta-modal-planner { max-width: 100%; }
   .ta-modal-tips { max-width: 100%; }
+
+  /* Modal drag indicator */
+  .ta-modal::before {
+    content: ''; display: block;
+    width: 40px; height: 4px;
+    background: var(--t-gray-300); border-radius: 2px;
+    margin: 0 auto 16px;
+  }
 
   /* Planner options better touch */
   .ta-option-btn { padding: 8px 16px; font-size: 0.85rem; }
@@ -815,14 +906,20 @@ body {
 
   /* Toast above sidebar */
   .ta-toast { bottom: calc(50vh + 60px); font-size: 0.82rem; }
+
+  /* Peek state: hide content below handle+topbar */
+  .ta-sidebar.snap-peek .ta-search-wrap,
+  .ta-sidebar.snap-peek .ta-tabs,
+  .ta-sidebar.snap-peek .ta-tab-content,
+  .ta-sidebar.snap-peek .ta-detail,
+  .ta-sidebar.snap-peek .ta-tips-btn,
+  .ta-sidebar.snap-peek .ta-footer,
+  .ta-sidebar.snap-peek .ta-filters {
+    display: none !important;
+  }
 }
 
 @media (max-width: 480px) {
-  .ta-sidebar { height: 55vh; }
-  .ta-map-wrap { height: 45vh; }
-  .ta-fab { bottom: calc(55vh + 8px); padding: 10px 16px; font-size: 0.82rem; }
-  .ta-toast { bottom: calc(55vh + 60px); }
-
   /* Stack form actions vertically */
   .ta-form-actions {
     flex-direction: column;
