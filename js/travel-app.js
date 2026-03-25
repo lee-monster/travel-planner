@@ -1384,17 +1384,53 @@
     });
   };
 
-  // Simple markdown renderer for planner output
+  // Markdown renderer for planner output (supports tables)
   function renderMarkdown(text) {
+    // Escape HTML
+    text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Parse tables first (before line-level transforms)
+    text = text.replace(/((?:^\|.+\|[ \t]*\n)+)/gm, function(block) {
+      var rows = block.trim().split('\n');
+      if (rows.length < 2) return block;
+
+      // Check if second row is separator (|---|---|)
+      var isSep = /^\|[\s\-:]+(\|[\s\-:]+)+\|?$/.test(rows[1]);
+      var html = '<div class="ta-table-wrap"><table class="ta-plan-table">';
+
+      rows.forEach(function(row, i) {
+        if (isSep && i === 1) return; // skip separator row
+        var cells = row.split('|').filter(function(c, ci, arr) {
+          return ci > 0 && ci < arr.length - 1;
+        });
+        var tag = (isSep && i === 0) ? 'th' : 'td';
+        var rowTag = (isSep && i === 0) ? 'thead' : '';
+        html += (i === 0 && isSep ? '<thead>' : (i === 2 && isSep ? '<tbody>' : ''));
+        html += '<tr>';
+        cells.forEach(function(cell) {
+          html += '<' + tag + '>' + cell.trim() + '</' + tag + '>';
+        });
+        html += '</tr>';
+        html += (i === 0 && isSep ? '</thead>' : '');
+      });
+
+      if (isSep && rows.length > 2) html += '</tbody>';
+      html += '</table></div>';
+      return html;
+    });
+
     return text
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
       .replace(/^### (.+)$/gm, '<h3>$1</h3>')
       .replace(/^## (.+)$/gm, '<h2>$1</h2>')
       .replace(/^# (.+)$/gm, '<h1>$1</h1>')
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
       .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/^(\d+)\. (.+)$/gm, '<li class="ta-md-ol">$1. $2</li>')
       .replace(/^- (.+)$/gm, '<li>$1</li>')
-      .replace(/(<li>.*<\/li>)/s, '<ul>$1</ul>')
+      .replace(/((?:<li[^>]*>.*<\/li>\s*)+)/g, function(m) {
+        var tag = m.indexOf('ta-md-ol') >= 0 ? 'ol' : 'ul';
+        return '<' + tag + '>' + m + '</' + tag + '>';
+      })
       .replace(/\n{2,}/g, '</p><p>')
       .replace(/\n/g, '<br>');
   }
@@ -2124,10 +2160,10 @@
     updateFabForSnap(snap);
     updateViewToggle(snap);
 
-    // Trigger map resize
+    // Trigger map resize after transition completes
     setTimeout(function() {
       if (window._taTriggerResize) window._taTriggerResize();
-    }, 350);
+    }, 400);
   }
 
   function updateFabPosition(height) {

@@ -14,6 +14,11 @@
   <title>TravelKo - Discover Korea | 한국 여행 가이드</title>
   <meta name="description" content="TravelKo - Discover the best travel spots in Korea, recommended by the community. 커뮤니티가 추천하는 한국 여행 명소.">
   <meta name="theme-color" content="#059669">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta property="og:type" content="website">
   <meta property="og:title" content="TravelKo - Discover Korea">
   <meta property="og:description" content="Discover the best travel spots in Korea with interactive Naver Map. Food, attractions, cafes, nature and more.">
@@ -227,12 +232,11 @@
 
       <!-- Footer -->
       <div class="ta-footer" id="ta-footer">
-        <p data-i18n="footer.text"></p>
-        <div class="ta-footer-links">
-          <a href="/privacy" data-i18n="footer.privacy">Privacy Policy</a>
-          <span>|</span>
-          <a href="/terms" data-i18n="footer.terms">Terms of Service</a>
-        </div>
+        <span data-i18n="footer.text"></span>
+        <span class="ta-footer-sep">·</span>
+        <a href="/privacy" data-i18n="footer.privacy">Privacy</a>
+        <span class="ta-footer-sep">·</span>
+        <a href="/terms" data-i18n="footer.terms">Terms</a>
       </div>
     </aside>
 
@@ -446,6 +450,13 @@
       document.head.appendChild(as);
     };
     document.head.appendChild(ls);
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function() {
+        navigator.serviceWorker.register('/sw.js');
+      });
+    }
   </script>
 </body>
 </html>

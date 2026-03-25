@@ -1,0 +1,45 @@
+{
+  "packageId": "kr.koinfo.travel",
+  "host": "travel.koinfo.kr",
+  "name": "TravelKo",
+  "launcherName": "TravelKo",
+  "display": "standalone",
+  "themeColor": "#059669",
+  "navigationColor": "#ffffff",
+  "navigationColorDark": "#1f2937",
+  "navigationDividerColor": "#e5e7eb",
+  "navigationDividerColorDark": "#374151",
+  "backgroundColor": "#ffffff",
+  "enableNotifications": false,
+  "startUrl": "/?source=twa",
+  "iconUrl": "https://travel.koinfo.kr/icons/icon-512.png",
+  "maskableIconUrl": "https://travel.koinfo.kr/icons/maskable-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "travelko-release.keystore",
+    "alias": "travelko"
+  },
+  "appVersionCode": 1,
+  "appVersionName": "1.0.0",
+  "shortcuts": [
+    {
+      "name": "AI Trip Planner",
+      "shortName": "Planner",
+      "url": "/?tab=planner&source=twa",
+      "chosenIconUrl": "https://travel.koinfo.kr/icons/icon-192.png"
+    }
+  ],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://travel.koinfo.kr/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://travel.koinfo.kr/",
+  "minSdkVersion": 23,
+  "orientation": "portrait"
+}
