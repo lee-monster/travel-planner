@@ -51,7 +51,7 @@
   var CAT_COLORS = {
     food: '#EF4444', attraction: '#3B82F6', cafe: '#F59E0B',
     nature: '#22C55E', shopping: '#8B5CF6', nightlife: '#EC4899',
-    halal: '#059669', mosque: '#0891B2', vegetarian: '#65A30D'
+    halal: '#2563EB', mosque: '#0891B2', vegetarian: '#65A30D'
   };
 
   // === Map Providers Abstraction ===

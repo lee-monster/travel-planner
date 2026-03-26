@@ -5,5 +5,8 @@
   "description": "KoInfo - Multi-country information platform for foreigners in Korea",
   "dependencies": {
     "@notionhq/client": "^2.2.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.34.5"
   }
 }
