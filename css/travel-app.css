@@ -184,13 +184,24 @@ body {
   flex: 1; overflow-y: auto; display: none;
 }
 .ta-detail.active { display: block; }
+.ta-detail-header {
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--t-gray-100);
+}
 .ta-detail-back {
-  display: flex; align-items: center; gap: 6px; padding: 12px 16px;
+  display: flex; align-items: center; gap: 6px; padding: 8px 16px;
   font-size: 0.85rem; color: var(--t-gray-600); cursor: pointer;
-  border: none; background: none; width: 100%; text-align: left;
-  border-bottom: 1px solid var(--t-gray-100); transition: background var(--t-transition);
+  border: none; background: none; text-align: left;
+  transition: background var(--t-transition);
 }
 .ta-detail-back:hover { background: var(--t-gray-50); }
+.ta-detail-myspots-btn {
+  display: flex; align-items: center; gap: 4px; padding: 5px 12px; margin-right: 12px;
+  font-size: 0.78rem; font-weight: 600; color: var(--t-primary); cursor: pointer;
+  border: 1px solid var(--t-primary); border-radius: 50px; background: var(--t-white);
+  transition: all var(--t-transition); white-space: nowrap;
+}
+.ta-detail-myspots-btn:hover { background: var(--t-primary-bg); }
 .ta-detail-images {
   width: 100%; overflow-x: auto; display: flex; gap: 2px; background: var(--t-gray-900);
 }
@@ -438,7 +449,8 @@ body {
   display: flex; gap: 8px; margin-bottom: 12px;
 }
 .ta-bookmark-btn {
-  display: flex; align-items: center; gap: 5px; padding: 6px 14px;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  padding: 6px 14px; flex: 1;
   border: 1px solid var(--t-gray-200); border-radius: 50px;
   background: var(--t-white); font-size: 0.78rem; font-weight: 600;
   cursor: pointer; transition: all var(--t-transition); color: var(--t-gray-600);
@@ -853,9 +865,10 @@ body {
   .ta-detail-images img { height: 200px; }
   .ta-detail-body { padding: 12px; }
   .ta-detail-body h2 { font-size: 1.1rem; }
-  .ta-detail-bookmarks { flex-wrap: wrap; }
+  .ta-detail-bookmarks { flex-wrap: nowrap; }
   .ta-bookmark-btn { padding: 8px 12px; font-size: 0.8rem; }
-  .ta-detail-back { padding: 10px 12px; min-height: 44px; }
+  .ta-detail-back { padding: 8px 12px; min-height: 44px; }
+  .ta-detail-myspots-btn { margin-right: 10px; padding: 5px 10px; font-size: 0.75rem; }
 
   /* FAB position above bottom sheet */
   .ta-fab {
@@ -964,9 +977,9 @@ body {
   }
   .ta-form-actions button { width: 100%; }
 
-  /* Bookmark buttons stack */
-  .ta-detail-bookmarks { flex-direction: column; gap: 6px; }
-  .ta-bookmark-btn { justify-content: center; }
+  /* Bookmark buttons stay in row */
+  .ta-detail-bookmarks { gap: 6px; }
+  .ta-bookmark-btn { padding: 6px 8px; font-size: 0.75rem; }
 }
 
 /* Footer */
@@ -974,3 +987,21 @@ body {
 .ta-footer a { color: var(--t-gray-500); text-decoration: none; }
 .ta-footer a:hover { color: var(--t-primary); text-decoration: underline; }
 .ta-footer-sep { color: var(--t-gray-300); margin: 0 0.1rem; }
+
+/* Auth menu footer (for app mode) */
+.ta-auth-menu-footer {
+  display: flex; align-items: center; justify-content: center; gap: 0.3rem;
+  padding: 6px 14px; font-size: 0.72rem; color: var(--t-gray-400);
+  border-top: 1px solid var(--t-gray-100); margin-top: 4px;
+}
+.ta-auth-menu-footer a { color: var(--t-gray-400); text-decoration: none; font-size: 0.72rem; }
+.ta-auth-menu-footer a:hover { color: var(--t-primary); }
+
+/* App mode (standalone/TWA): hide web-only, show app-only */
+.ta-app-only { display: none !important; }
+@media (display-mode: standalone) {
+  .ta-web-only { display: none !important; }
+  .ta-app-only { display: block !important; }
+  .ta-auth-menu .ta-app-only { display: block !important; }
+  .ta-auth-menu-footer.ta-app-only { display: flex !important; }
+}

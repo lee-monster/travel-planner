@@ -131,6 +131,12 @@
                 <button onclick="taShowMySpots()" data-i18n="bookmark.mySpots">My Spots</button>
                 <button onclick="taShowPlanner()" data-i18n="planner.btn">Plan Trip</button>
                 <button onclick="taShowMyPlans()" data-i18n="planner.myPlans">My Plans</button>
+                <button class="ta-app-only" onclick="taShowTips()" data-i18n="tips.btn">Travel Tips</button>
+                <div class="ta-auth-menu-footer ta-app-only">
+                  <a href="/privacy" data-i18n="footer.privacy">Privacy</a>
+                  <span class="ta-footer-sep">·</span>
+                  <a href="/terms" data-i18n="footer.terms">Terms</a>
+                </div>
                 <button onclick="taSignOut()" data-i18n="auth.signOut">Sign Out</button>
               </div>
             </div>
@@ -211,7 +217,10 @@
 
       <!-- Detail Panel -->
       <div class="ta-detail" id="ta-detail">
-        <button class="ta-detail-back" id="ta-detail-back" onclick="taBackToList()">← Back</button>
+        <div class="ta-detail-header">
+          <button class="ta-detail-back" id="ta-detail-back" onclick="taBackToList()">← Back</button>
+          <button class="ta-detail-myspots-btn" id="ta-detail-myspots-btn" onclick="taShowMySpots()" data-i18n="bookmark.mySpots">My Spots</button>
+        </div>
         <div id="ta-detail-images" class="ta-detail-images"></div>
         <div class="ta-detail-body">
           <span id="ta-detail-cat" class="ta-spot-cat"></span>
@@ -227,11 +236,11 @@
         </div>
       </div>
 
-      <!-- Tips Button -->
-      <button class="ta-tips-btn" onclick="taShowTips()" data-i18n="tips.btn">Travel Tips</button>
+      <!-- Tips Button (hidden in app mode) -->
+      <button class="ta-tips-btn ta-web-only" onclick="taShowTips()" data-i18n="tips.btn">Travel Tips</button>
 
-      <!-- Footer -->
-      <div class="ta-footer" id="ta-footer">
+      <!-- Footer (hidden in app mode) -->
+      <div class="ta-footer ta-web-only" id="ta-footer">
         <span data-i18n="footer.text"></span>
         <span class="ta-footer-sep">·</span>
         <a href="/privacy" data-i18n="footer.privacy">Privacy</a>

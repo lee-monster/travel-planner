@@ -797,6 +797,10 @@
     var detail = document.getElementById('ta-detail');
     detail.classList.add('active');
 
+    // Show/hide My Spots button based on auth state
+    var mySpotsBtn = document.getElementById('ta-detail-myspots-btn');
+    if (mySpotsBtn) mySpotsBtn.style.display = state.authUser ? '' : 'none';
+
     renderDetail(spot);
     highlightMarker(spot);
 
