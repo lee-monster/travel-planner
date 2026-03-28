@@ -18,6 +18,8 @@ module.exports = async function handler(req, res) {
       return await getBookmarks(user, res);
     } else if (req.method === 'POST') {
       return await updateBookmark(user, req.body, res);
+    } else if (req.method === 'DELETE') {
+      return await deleteAccount(user, res);
     }
     return res.status(405).json({ error: 'Method not allowed' });
   } catch (err) {
@@ -68,6 +70,18 @@ async function updateBookmark(user, body, res) {
   });
 
   return res.status(200).json({ success: true, bookmarks });
+}
+
+async function deleteAccount(user, res) {
+  const userPage = await findUserPage(user.googleId);
+  if (!userPage) return res.status(404).json({ error: 'User not found' });
+
+  await notion.pages.update({
+    page_id: userPage.id,
+    archived: true
+  });
+
+  return res.status(200).json({ success: true, message: 'Account deleted' });
 }
 
 async function findUserPage(googleId) {

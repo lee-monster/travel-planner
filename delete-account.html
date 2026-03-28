@@ -382,7 +382,7 @@
       showStatus('success', msg.deleting);
 
       try {
-        var res = await fetch('/api/user/delete-account', {
+        var res = await fetch('/api/user/bookmarks', {
           method: 'DELETE',
           headers: { 'Authorization': 'Bearer ' + authToken, 'Content-Type': 'application/json' }
         });
