@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete Account - TravelKo</title>
+  <meta name="robots" content="noindex">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9fafb; color: #1f2937; line-height: 1.7; }
+    .header { background: #2563EB; color: white; padding: 1rem 2rem; display: flex; align-items: center; gap: 1rem; }
+    .header a { color: white; text-decoration: none; font-weight: 700; font-size: 1.25rem; }
+    .lang-bar { background: #1D4ED8; padding: 0.5rem 2rem; display: flex; gap: 0.75rem; flex-wrap: wrap; }
+    .lang-bar button { background: rgba(255,255,255,0.15); border: none; color: white; padding: 0.25rem 0.75rem; border-radius: 4px; cursor: pointer; font-size: 0.85rem; }
+    .lang-bar button.active { background: white; color: #1D4ED8; font-weight: 600; }
+    .container { max-width: 800px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .lang-section { display: none; }
+    .lang-section.active { display: block; }
+    h1 { font-size: 1.75rem; margin-bottom: 0.5rem; color: #DC2626; }
+    h2 { font-size: 1.25rem; margin: 1.5rem 0 0.5rem; color: #1E40AF; }
+    p, li { margin-bottom: 0.5rem; font-size: 0.95rem; }
+    ul { padding-left: 1.5rem; }
+    .warning { background: #FEF2F2; border: 1px solid #FECACA; border-radius: 8px; padding: 1rem; margin: 1rem 0; color: #991B1B; }
+    .auth-section { margin: 1.5rem 0; padding: 1.5rem; background: #F9FAFB; border-radius: 8px; border: 1px solid #E5E7EB; }
+    .btn { display: inline-block; padding: 0.75rem 1.5rem; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
+    .btn:hover { opacity: 0.9; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-google { background: white; color: #1f2937; border: 1px solid #D1D5DB; display: flex; align-items: center; gap: 0.5rem; }
+    .btn-delete { background: #DC2626; color: white; }
+    .btn-delete:hover { background: #B91C1C; }
+    .status { margin: 1rem 0; padding: 0.75rem; border-radius: 8px; display: none; }
+    .status.success { display: block; background: #F0FDF4; border: 1px solid #BBF7D0; color: #166534; }
+    .status.error { display: block; background: #FEF2F2; border: 1px solid #FECACA; color: #991B1B; }
+    .user-info { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+    .user-info img { width: 40px; height: 40px; border-radius: 50%; }
+    .back { display: inline-block; margin-top: 1.5rem; color: #2563EB; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    .hidden { display: none !important; }
+    @media (max-width: 640px) { .container { margin: 1rem; padding: 1.25rem; } }
+  </style>
+</head>
+<body>
+  <div class="header"><a href="/">TravelKo</a></div>
+  <div class="lang-bar">
+    <button onclick="showLang('en')" class="active">English</button>
+    <button onclick="showLang('ko')">한국어</button>
+    <button onclick="showLang('id')">Bahasa Indonesia</button>
+    <button onclick="showLang('mn')">Монгол</button>
+    <button onclick="showLang('ms')">Bahasa Melayu</button>
+    <button onclick="showLang('vi')">Tiếng Việt</button>
+  </div>
+  <div class="container">
+
+    <!-- English -->
+    <div class="lang-section active" id="lang-en">
+      <h1>Delete Account</h1>
+      <p>You can permanently delete your TravelKo account and all associated data.</p>
+
+      <h2>What will be deleted</h2>
+      <ul>
+        <li>Your profile information (name, email, profile picture)</li>
+        <li>All bookmarks (want to visit, interested)</li>
+        <li>AI planner usage history</li>
+        <li>All data stored in our database linked to your account</li>
+      </ul>
+
+      <div class="warning">
+        <strong>Warning:</strong> This action is permanent and cannot be undone. Once your account is deleted, we cannot recover your data.
+      </div>
+
+      <div class="auth-section">
+        <div id="login-section-en">
+          <p>Please sign in to verify your identity before deleting your account.</p>
+          <button class="btn btn-google" onclick="signIn()">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 2.58 9 2.58z"/></svg>
+            Sign in with Google
+          </button>
+        </div>
+        <div id="user-section-en" class="hidden">
+          <div class="user-info">
+            <img id="user-avatar-en" src="" alt="">
+            <div>
+              <strong id="user-name-en"></strong><br>
+              <span id="user-email-en" style="color:#6b7280;font-size:0.9rem"></span>
+            </div>
+          </div>
+          <p>Are you sure you want to delete this account?</p>
+          <button class="btn btn-delete" onclick="deleteAccount()" id="delete-btn-en">Delete My Account Permanently</button>
+        </div>
+      </div>
+
+      <div id="status-en" class="status"></div>
+      <a href="/" class="back">&larr; Back to TravelKo</a>
+    </div>
+
+    <!-- Korean -->
+    <div class="lang-section" id="lang-ko">
+      <h1>계정 삭제</h1>
+      <p>TravelKo 계정과 모든 관련 데이터를 영구적으로 삭제할 수 있습니다.</p>
+
+      <h2>삭제되는 데이터</h2>
+      <ul>
+        <li>프로필 정보 (이름, 이메일, 프로필 사진)</li>
+        <li>모든 북마크 (방문할 곳, 관심 장소)</li>
+        <li>AI 플래너 사용 기록</li>
+        <li>계정에 연결된 데이터베이스의 모든 데이터</li>
+      </ul>
+
+      <div class="warning">
+        <strong>주의:</strong> 이 작업은 영구적이며 되돌릴 수 없습니다. 계정이 삭제되면 데이터를 복구할 수 없습니다.
+      </div>
+
+      <div class="auth-section">
+        <div id="login-section-ko">
+          <p>계정 삭제 전 본인 확인을 위해 로그인해 주세요.</p>
+          <button class="btn btn-google" onclick="signIn()">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 2.58 9 2.58z"/></svg>
+            Google로 로그인
+          </button>
+        </div>
+        <div id="user-section-ko" class="hidden">
+          <div class="user-info">
+            <img id="user-avatar-ko" src="" alt="">
+            <div>
+              <strong id="user-name-ko"></strong><br>
+              <span id="user-email-ko" style="color:#6b7280;font-size:0.9rem"></span>
+            </div>
+          </div>
+          <p>이 계정을 정말 삭제하시겠습니까?</p>
+          <button class="btn btn-delete" onclick="deleteAccount()" id="delete-btn-ko">계정 영구 삭제</button>
+        </div>
+      </div>
+
+      <div id="status-ko" class="status"></div>
+      <a href="/" class="back">&larr; TravelKo로 돌아가기</a>
+    </div>
+
+    <!-- Indonesian -->
+    <div class="lang-section" id="lang-id">
+      <h1>Hapus Akun</h1>
+      <p>Anda dapat menghapus akun TravelKo dan semua data terkait secara permanen.</p>
+
+      <h2>Data yang akan dihapus</h2>
+      <ul>
+        <li>Informasi profil Anda (nama, email, foto profil)</li>
+        <li>Semua bookmark (ingin dikunjungi, tertarik)</li>
+        <li>Riwayat penggunaan perencana AI</li>
+        <li>Semua data yang tersimpan di database kami yang terkait dengan akun Anda</li>
+      </ul>
+
+      <div class="warning">
+        <strong>Peringatan:</strong> Tindakan ini bersifat permanen dan tidak dapat dibatalkan. Setelah akun Anda dihapus, kami tidak dapat memulihkan data Anda.
+      </div>
+
+      <div class="auth-section">
+        <div id="login-section-id">
+          <p>Silakan masuk untuk memverifikasi identitas Anda sebelum menghapus akun.</p>
+          <button class="btn btn-google" onclick="signIn()">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 2.58 9 2.58z"/></svg>
+            Masuk dengan Google
+          </button>
+        </div>
+        <div id="user-section-id" class="hidden">
+          <div class="user-info">
+            <img id="user-avatar-id" src="" alt="">
+            <div>
+              <strong id="user-name-id"></strong><br>
+              <span id="user-email-id" style="color:#6b7280;font-size:0.9rem"></span>
+            </div>
+          </div>
+          <p>Apakah Anda yakin ingin menghapus akun ini?</p>
+          <button class="btn btn-delete" onclick="deleteAccount()" id="delete-btn-id">Hapus Akun Saya Secara Permanen</button>
+        </div>
+      </div>
+
+      <div id="status-id" class="status"></div>
+      <a href="/" class="back">&larr; Kembali ke TravelKo</a>
+    </div>
+
+    <!-- Mongolian -->
+    <div class="lang-section" id="lang-mn">
+      <h1>Бүртгэл устгах</h1>
+      <p>Та TravelKo бүртгэл болон холбогдох бүх мэдээллийг бүрмөсөн устгах боломжтой.</p>
+
+      <h2>Устгагдах мэдээлэл</h2>
+      <ul>
+        <li>Таны профайл мэдээлэл (нэр, имэйл, профайл зураг)</li>
+        <li>Бүх тэмдэглэлүүд (зочлох газар, сонирхсон)</li>
+        <li>AI төлөвлөгчийн хэрэглээний түүх</li>
+        <li>Таны бүртгэлтэй холбоотой мэдээллийн сангийн бүх мэдээлэл</li>
+      </ul>
+
+      <div class="warning">
+        <strong>Анхааруулга:</strong> Энэ үйлдэл бүрмөсөн бөгөөд буцаах боломжгүй. Таны бүртгэл устсаны дараа мэдээллийг сэргээх боломжгүй.
+      </div>
+
+      <div class="auth-section">
+        <div id="login-section-mn">
+          <p>Бүртгэл устгахаас өмнө өөрийгөө баталгаажуулахын тулд нэвтэрнэ үү.</p>
+          <button class="btn btn-google" onclick="signIn()">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 2.58 9 2.58z"/></svg>
+            Google-ээр нэвтрэх
+          </button>
+        </div>
+        <div id="user-section-mn" class="hidden">
+          <div class="user-info">
+            <img id="user-avatar-mn" src="" alt="">
+            <div>
+              <strong id="user-name-mn"></strong><br>
+              <span id="user-email-mn" style="color:#6b7280;font-size:0.9rem"></span>
+            </div>
+          </div>
+          <p>Энэ бүртгэлийг устгахдаа итгэлтэй байна уу?</p>
+          <button class="btn btn-delete" onclick="deleteAccount()" id="delete-btn-mn">Бүртгэлийг бүрмөсөн устгах</button>
+        </div>
+      </div>
+
+      <div id="status-mn" class="status"></div>
+      <a href="/" class="back">&larr; TravelKo руу буцах</a>
+    </div>
+
+    <!-- Malay -->
+    <div class="lang-section" id="lang-ms">
+      <h1>Padam Akaun</h1>
+      <p>Anda boleh memadamkan akaun TravelKo dan semua data berkaitan secara kekal.</p>
+
+      <h2>Data yang akan dipadamkan</h2>
+      <ul>
+        <li>Maklumat profil anda (nama, emel, gambar profil)</li>
+        <li>Semua tanda buku (ingin lawati, berminat)</li>
+        <li>Sejarah penggunaan perancang AI</li>
+        <li>Semua data dalam pangkalan data kami yang dikaitkan dengan akaun anda</li>
+      </ul>
+
+      <div class="warning">
+        <strong>Amaran:</strong> Tindakan ini kekal dan tidak boleh dibuat asal. Selepas akaun anda dipadamkan, kami tidak dapat memulihkan data anda.
+      </div>
+
+      <div class="auth-section">
+        <div id="login-section-ms">
+          <p>Sila log masuk untuk mengesahkan identiti anda sebelum memadamkan akaun.</p>
+          <button class="btn btn-google" onclick="signIn()">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 2.58 9 2.58z"/></svg>
+            Log masuk dengan Google
+          </button>
+        </div>
+        <div id="user-section-ms" class="hidden">
+          <div class="user-info">
+            <img id="user-avatar-ms" src="" alt="">
+            <div>
+              <strong id="user-name-ms"></strong><br>
+              <span id="user-email-ms" style="color:#6b7280;font-size:0.9rem"></span>
+            </div>
+          </div>
+          <p>Adakah anda pasti mahu memadamkan akaun ini?</p>
+          <button class="btn btn-delete" onclick="deleteAccount()" id="delete-btn-ms">Padam Akaun Saya Secara Kekal</button>
+        </div>
+      </div>
+
+      <div id="status-ms" class="status"></div>
+      <a href="/" class="back">&larr; Kembali ke TravelKo</a>
+    </div>
+
+    <!-- Vietnamese -->
+    <div class="lang-section" id="lang-vi">
+      <h1>X&#243;a t&#224;i kho&#7843;n</h1>
+      <p>B&#7841;n c&#243; th&#7875; x&#243;a v&#297;nh vi&#7877;n t&#224;i kho&#7843;n TravelKo v&#224; t&#7845;t c&#7843; d&#7919; li&#7879;u li&#234;n quan.</p>
+
+      <h2>D&#7919; li&#7879;u s&#7869; b&#7883; x&#243;a</h2>
+      <ul>
+        <li>Th&#244;ng tin h&#7891; s&#417; c&#7911;a b&#7841;n (t&#234;n, email, &#7843;nh &#273;&#7841;i di&#7879;n)</li>
+        <li>T&#7845;t c&#7843; d&#7845;u trang (mu&#7889;n gh&#233; th&#259;m, quan t&#226;m)</li>
+        <li>L&#7883;ch s&#7917; s&#7917; d&#7909;ng c&#244;ng c&#7909; l&#7853;p k&#7871; ho&#7841;ch AI</li>
+        <li>T&#7845;t c&#7843; d&#7919; li&#7879;u trong c&#417; s&#7903; d&#7919; li&#7879;u li&#234;n k&#7871;t v&#7899;i t&#224;i kho&#7843;n c&#7911;a b&#7841;n</li>
+      </ul>
+
+      <div class="warning">
+        <strong>C&#7843;nh b&#225;o:</strong> H&#224;nh &#273;&#7897;ng n&#224;y l&#224; v&#297;nh vi&#7877;n v&#224; kh&#244;ng th&#7875; ho&#224;n t&#225;c. Sau khi t&#224;i kho&#7843;n b&#7883; x&#243;a, ch&#250;ng t&#244;i kh&#244;ng th&#7875; kh&#244;i ph&#7909;c d&#7919; li&#7879;u c&#7911;a b&#7841;n.
+      </div>
+
+      <div class="auth-section">
+        <div id="login-section-vi">
+          <p>Vui l&#242;ng &#273;&#259;ng nh&#7853;p &#273;&#7875; x&#225;c minh danh t&#237;nh tr&#432;&#7899;c khi x&#243;a t&#224;i kho&#7843;n.</p>
+          <button class="btn btn-google" onclick="signIn()">
+            <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 2.58 9 2.58z"/></svg>
+            &#272;&#259;ng nh&#7853;p b&#7857;ng Google
+          </button>
+        </div>
+        <div id="user-section-vi" class="hidden">
+          <div class="user-info">
+            <img id="user-avatar-vi" src="" alt="">
+            <div>
+              <strong id="user-name-vi"></strong><br>
+              <span id="user-email-vi" style="color:#6b7280;font-size:0.9rem"></span>
+            </div>
+          </div>
+          <p>B&#7841;n c&#243; ch&#7855;c ch&#7855;n mu&#7889;n x&#243;a t&#224;i kho&#7843;n n&#224;y kh&#244;ng?</p>
+          <button class="btn btn-delete" onclick="deleteAccount()" id="delete-btn-vi">X&#243;a t&#224;i kho&#7843;n v&#297;nh vi&#7877;n</button>
+        </div>
+      </div>
+
+      <div id="status-vi" class="status"></div>
+      <a href="/" class="back">&larr; Quay l&#7841;i TravelKo</a>
+    </div>
+
+  </div>
+
+  <script>
+    var currentLang = 'en';
+    var authToken = null;
+    var currentUser = null;
+
+    var messages = {
+      en: { confirmPrompt: 'Type DELETE to confirm account deletion:', confirmWord: 'DELETE', deleting: 'Deleting your account...', success: 'Your account has been successfully deleted. All your data has been removed.', error: 'Failed to delete account. Please try again or contact us.', cancelled: 'Account deletion cancelled.' },
+      ko: { confirmPrompt: '계정 삭제를 확인하려면 DELETE를 입력하세요:', confirmWord: 'DELETE', deleting: '계정을 삭제하는 중...', success: '계정이 성공적으로 삭제되었습니다. 모든 데이터가 제거되었습니다.', error: '계정 삭제에 실패했습니다. 다시 시도하거나 문의해 주세요.', cancelled: '계정 삭제가 취소되었습니다.' },
+      id: { confirmPrompt: 'Ketik DELETE untuk mengonfirmasi penghapusan akun:', confirmWord: 'DELETE', deleting: 'Menghapus akun Anda...', success: 'Akun Anda telah berhasil dihapus. Semua data Anda telah dihapus.', error: 'Gagal menghapus akun. Silakan coba lagi atau hubungi kami.', cancelled: 'Penghapusan akun dibatalkan.' },
+      mn: { confirmPrompt: 'Бүртгэл устгахыг баталгаажуулахын тулд DELETE гэж бичнэ үү:', confirmWord: 'DELETE', deleting: 'Таны бүртгэлийг устгаж байна...', success: 'Таны бүртгэл амжилттай устгагдлаа. Бүх мэдээлэл устгагдсан.', error: 'Бүртгэл устгахад алдаа гарлаа. Дахин оролдоно уу.', cancelled: 'Бүртгэл устгах цуцлагдлаа.' },
+      ms: { confirmPrompt: 'Taip DELETE untuk mengesahkan pemadaman akaun:', confirmWord: 'DELETE', deleting: 'Memadamkan akaun anda...', success: 'Akaun anda telah berjaya dipadamkan. Semua data anda telah dialih keluar.', error: 'Gagal memadamkan akaun. Sila cuba lagi atau hubungi kami.', cancelled: 'Pemadaman akaun dibatalkan.' },
+      vi: { confirmPrompt: 'Nh\u1eadp DELETE \u0111\u1ec3 x\u00e1c nh\u1eadn x\u00f3a t\u00e0i kho\u1ea3n:', confirmWord: 'DELETE', deleting: '\u0110ang x\u00f3a t\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n...', success: 'T\u00e0i kho\u1ea3n c\u1ee7a b\u1ea1n \u0111\u00e3 \u0111\u01b0\u1ee3c x\u00f3a th\u00e0nh c\u00f4ng. T\u1ea5t c\u1ea3 d\u1eef li\u1ec7u \u0111\u00e3 \u0111\u01b0\u1ee3c x\u00f3a.', error: 'X\u00f3a t\u00e0i kho\u1ea3n th\u1ea5t b\u1ea1i. Vui l\u00f2ng th\u1eed l\u1ea1i ho\u1eb7c li\u00ean h\u1ec7 ch\u00fang t\u00f4i.', cancelled: 'Vi\u1ec7c x\u00f3a t\u00e0i kho\u1ea3n \u0111\u00e3 b\u1ecb h\u1ee7y.' }
+    };
+
+    function showLang(lang) {
+      currentLang = lang;
+      document.querySelectorAll('.lang-section').forEach(function(el) { el.classList.remove('active'); });
+      document.querySelectorAll('.lang-bar button').forEach(function(el) { el.classList.remove('active'); });
+      document.getElementById('lang-' + lang).classList.add('active');
+      var labels = { en: 'English', ko: '한국어', id: 'Bahasa Indonesia', mn: 'Монгол', ms: 'Bahasa Melayu', vi: 'Tiếng Việt' };
+      document.querySelectorAll('.lang-bar button').forEach(function(btn) {
+        if (btn.textContent === labels[lang]) btn.classList.add('active');
+      });
+      // Show user section if already logged in
+      if (currentUser) showUserInfo();
+    }
+
+    function showStatus(type, msg) {
+      var el = document.getElementById('status-' + currentLang);
+      el.className = 'status ' + type;
+      el.textContent = msg;
+    }
+
+    function showUserInfo() {
+      var langs = ['en', 'ko', 'id', 'mn', 'ms', 'vi'];
+      langs.forEach(function(lang) {
+        document.getElementById('login-section-' + lang).classList.add('hidden');
+        document.getElementById('user-section-' + lang).classList.remove('hidden');
+        document.getElementById('user-name-' + lang).textContent = currentUser.name;
+        document.getElementById('user-email-' + lang).textContent = currentUser.email;
+        var avatar = document.getElementById('user-avatar-' + lang);
+        if (currentUser.avatar) { avatar.src = currentUser.avatar; }
+        else { avatar.style.display = 'none'; }
+      });
+    }
+
+    function signIn() {
+      // Check if already logged in via TravelKo main app
+      var token = localStorage.getItem('travelko_token');
+      var user = localStorage.getItem('travelko_user');
+      if (token && user) {
+        authToken = token;
+        currentUser = JSON.parse(user);
+        showUserInfo();
+        return;
+      }
+      // Redirect to main app for login, then come back
+      window.location.href = '/?login=1&redirect=' + encodeURIComponent('/delete-account');
+    }
+
+    async function deleteAccount() {
+      var msg = messages[currentLang];
+      var confirmation = prompt(msg.confirmPrompt);
+      if (confirmation !== msg.confirmWord) {
+        showStatus('error', msg.cancelled);
+        return;
+      }
+
+      // Disable all delete buttons
+      var langs = ['en', 'ko', 'id', 'mn', 'ms', 'vi'];
+      langs.forEach(function(lang) {
+        document.getElementById('delete-btn-' + lang).disabled = true;
+      });
+
+      showStatus('success', msg.deleting);
+
+      try {
+        var res = await fetch('/api/user/delete-account', {
+          method: 'DELETE',
+          headers: { 'Authorization': 'Bearer ' + authToken, 'Content-Type': 'application/json' }
+        });
+        var data = await res.json();
+        if (res.ok && data.success) {
+          // Clear local data
+          localStorage.removeItem('travelko_token');
+          localStorage.removeItem('travelko_user');
+          showStatus('success', msg.success);
+        } else {
+          showStatus('error', msg.error);
+          langs.forEach(function(lang) {
+            document.getElementById('delete-btn-' + lang).disabled = false;
+          });
+        }
+      } catch (e) {
+        showStatus('error', msg.error);
+        langs.forEach(function(lang) {
+          document.getElementById('delete-btn-' + lang).disabled = false;
+        });
+      }
+    }
+
+    // Auto-detect language and check existing login
+    (function() {
+      var saved = localStorage.getItem('travelko_lang');
+      if (saved && document.getElementById('lang-' + saved)) showLang(saved);
+
+      var token = localStorage.getItem('travelko_token');
+      var user = localStorage.getItem('travelko_user');
+      if (token && user) {
+        authToken = token;
+        try { currentUser = JSON.parse(user); showUserInfo(); } catch(e) {}
+      }
+    })();
+  </script>
+</body>
+</html>
