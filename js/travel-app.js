@@ -722,6 +722,13 @@
         renderSpotList(filtered);
         renderMapMarkers(filtered);
         renderMySpots();
+
+        // Deep-link: open spot from ?spot= parameter
+        if (!append && state._pendingSpotId) {
+          var deepSpot = state.spots.find(function(s) { return s.id === state._pendingSpotId; });
+          if (deepSpot) showDetail(deepSpot);
+          state._pendingSpotId = null;
+        }
       })
       .catch(function() {
         state.loading = false;
@@ -935,7 +942,19 @@
     } else if (spot.naverMapLink) {
       actionsHtml += '<a href="' + escapeAttr(spot.naverMapLink) + '" target="_blank" rel="noopener" class="ta-detail-naver">' + t('app.openNaver') + '</a>';
     }
+    // Share buttons
+    var shareUrl = 'https://travel.koinfo.kr/spot/' + spot.id + '?lang=' + state.lang;
+    var shareText = spot.name + ' — TravelKo';
+    actionsHtml += '<div class="ta-spot-share">' +
+      '<button class="ta-share-spot-btn" onclick="taShareSpot(\'whatsapp\')" title="WhatsApp">💬</button>' +
+      '<button class="ta-share-spot-btn" onclick="taShareSpot(\'facebook\')" title="Facebook">📘</button>' +
+      '<button class="ta-share-spot-btn" onclick="taShareSpot(\'x\')" title="X">𝕏</button>' +
+      '<button class="ta-share-spot-btn" onclick="taShareSpot(\'telegram\')" title="Telegram">✈️</button>' +
+      '<button class="ta-share-spot-btn" onclick="taShareSpot(\'copy\')" title="Copy Link">🔗</button>' +
+    '</div>';
     actionsEl.innerHTML = actionsHtml;
+    actionsEl.dataset.shareUrl = shareUrl;
+    actionsEl.dataset.shareText = shareText;
 
     // Submitted by
     var byEl = document.getElementById('ta-detail-by');
@@ -946,6 +965,25 @@
       byEl.style.display = 'none';
     }
   }
+
+  window.taShareSpot = function(platform) {
+    var el = document.getElementById('ta-detail-actions');
+    var url = encodeURIComponent(el.dataset.shareUrl || '');
+    var text = encodeURIComponent(el.dataset.shareText || '');
+    var link = '';
+    switch (platform) {
+      case 'whatsapp': link = 'https://wa.me/?text=' + text + '%20' + url; break;
+      case 'facebook': link = 'https://www.facebook.com/sharer/sharer.php?u=' + url; break;
+      case 'x': link = 'https://x.com/intent/tweet?text=' + text + '&url=' + url; break;
+      case 'telegram': link = 'https://t.me/share/url?url=' + url + '&text=' + text; break;
+      case 'copy':
+        navigator.clipboard.writeText(decodeURIComponent(url)).then(function() {
+          showToast('Link copied!');
+        });
+        return;
+    }
+    if (link) window.open(link, '_blank', 'width=600,height=400');
+  };
 
   window.taToggleBookmark = function(spotId, type) {
     toggleBookmark(spotId, type);
@@ -2444,6 +2482,10 @@
   }
 
   function init() {
+    // Check for deep-link spot parameter
+    var spotParam = new URLSearchParams(window.location.search).get('spot');
+    if (spotParam) state._pendingSpotId = spotParam;
+
     initLanguage();
     applyTranslations();
     initFilters();

@@ -59,8 +59,23 @@ module.exports = async function handler(req, res) {
         }
         await delay(50);
       }
+    } else if (action === 'update_translations' && Array.isArray(updates)) {
+      // updates: [{ id, properties: { Name_ms: "...", Description_ms: "...", ... } }, ...]
+      for (const u of updates) {
+        try {
+          const props = {};
+          for (const [key, val] of Object.entries(u.properties || {})) {
+            props[key] = { rich_text: [{ text: { content: val } }] };
+          }
+          await notion.pages.update({ page_id: u.id, properties: props });
+          results.push({ id: u.id, status: 'ok' });
+        } catch (e) {
+          results.push({ id: u.id, status: 'error', message: e.message });
+        }
+        await delay(50);
+      }
     } else {
-      return res.status(400).json({ error: 'Invalid action. Use "unpublish" or "update_coords".' });
+      return res.status(400).json({ error: 'Invalid action. Use "unpublish", "update_coords", or "update_translations".' });
     }
 
     const ok = results.filter(r => r.status === 'ok').length;

@@ -1,5 +1,18 @@
-// TravelKo sitemap generator
-module.exports = function handler(req, res) {
+// TravelKo sitemap generator — includes individual spots
+const { Client } = require('@notionhq/client');
+
+let notionClient = null;
+function getNotion() {
+  if (!notionClient) notionClient = new Client({ auth: process.env.NOTION_TOKEN_TRAVEL });
+  return notionClient;
+}
+
+function getPlainText(arr) {
+  if (!arr || !Array.isArray(arr)) return '';
+  return arr.map(t => t.plain_text || '').join('');
+}
+
+module.exports = async function handler(req, res) {
   const baseUrl = 'https://travel.koinfo.kr';
   const now = new Date().toISOString().split('T')[0];
 
@@ -30,6 +43,10 @@ module.exports = function handler(req, res) {
     return baseUrl + path + '?lang=' + lang;
   }
 
+  function escXml(str) {
+    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
   var xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
   xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"';
   xml += ' xmlns:xhtml="http://www.w3.org/1999/xhtml">\n';
@@ -38,18 +55,60 @@ module.exports = function handler(req, res) {
   basePaths.forEach(function(bp) {
     langs.forEach(function(lang) {
       xml += '  <url>\n';
-      xml += '    <loc>' + langUrl(bp.path, lang) + '</loc>\n';
+      xml += '    <loc>' + escXml(langUrl(bp.path, lang)) + '</loc>\n';
       xml += '    <lastmod>' + now + '</lastmod>\n';
       xml += '    <changefreq>' + bp.changefreq + '</changefreq>\n';
       xml += '    <priority>' + bp.priority + '</priority>\n';
-      // hreflang alternates pointing to each language version
       langs.forEach(function(altLang) {
-        xml += '    <xhtml:link rel="alternate" hreflang="' + altLang + '" href="' + langUrl(bp.path, altLang) + '"/>\n';
+        xml += '    <xhtml:link rel="alternate" hreflang="' + altLang + '" href="' + escXml(langUrl(bp.path, altLang)) + '"/>\n';
       });
-      xml += '    <xhtml:link rel="alternate" hreflang="x-default" href="' + baseUrl + bp.path + '"/>\n';
+      xml += '    <xhtml:link rel="alternate" hreflang="x-default" href="' + escXml(baseUrl + bp.path) + '"/>\n';
       xml += '  </url>\n';
     });
   });
+
+  // Fetch all published spots and add individual spot pages
+  try {
+    const dbId = process.env.NOTION_DB_TRAVEL;
+    if (dbId) {
+      const notion = getNotion();
+      let hasMore = true;
+      let cursor = undefined;
+
+      while (hasMore) {
+        const response = await notion.databases.query({
+          database_id: dbId,
+          filter: { property: 'Published', checkbox: { equals: true } },
+          page_size: 100,
+          start_cursor: cursor,
+        });
+
+        response.results.forEach(function(page) {
+          const spotId = page.id;
+          const spotPath = '/spot/' + spotId;
+
+          langs.forEach(function(lang) {
+            const spotLangUrl = baseUrl + spotPath + '?lang=' + lang;
+            xml += '  <url>\n';
+            xml += '    <loc>' + escXml(spotLangUrl) + '</loc>\n';
+            xml += '    <lastmod>' + (page.last_edited_time || now).split('T')[0] + '</lastmod>\n';
+            xml += '    <changefreq>weekly</changefreq>\n';
+            xml += '    <priority>0.6</priority>\n';
+            langs.forEach(function(altLang) {
+              xml += '    <xhtml:link rel="alternate" hreflang="' + altLang + '" href="' + escXml(baseUrl + spotPath + '?lang=' + altLang) + '"/>\n';
+            });
+            xml += '    <xhtml:link rel="alternate" hreflang="x-default" href="' + escXml(baseUrl + spotPath) + '"/>\n';
+            xml += '  </url>\n';
+          });
+        });
+
+        hasMore = response.has_more;
+        cursor = response.next_cursor;
+      }
+    }
+  } catch (err) {
+    // If spot fetching fails, continue with base paths only
+  }
 
   xml += '</urlset>';
 
