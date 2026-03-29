@@ -845,7 +845,7 @@ body {
 
   /* Bottom sheet layout */
   .ta-layout { flex-direction: column; position: relative; }
-  .ta-map-wrap { flex: 1; height: 100vh; min-height: 0; }
+  .ta-map-wrap { flex: 1; height: 100vh; min-height: 0; padding-top: 44px; }
   .ta-sidebar {
     width: 100%; border-right: none;
     border-top: none;
@@ -895,8 +895,7 @@ body {
     height: 44px; padding: 0 10px;
   }
   .ta-brand-logo { height: 28px; }
-  /* Offset sidebar below fixed header */
-  .ta-sidebar { padding-top: 44px; }
+  /* No padding-top needed: sidebar is bottom sheet, header floats above map */
 
   /* Category row: horizontal scroll with fade hint */
   .ta-cat-row-wrap::after { display: block; }
