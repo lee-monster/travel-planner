@@ -113,13 +113,50 @@
           <img src="images/main.png" alt="TravelKo" class="ta-brand-logo">
         </a>
         <div class="ta-topbar-actions">
+          <!-- How to Use button -->
+          <button class="ta-guide-btn" onclick="taShowGuide()" data-i18n-title="guide.btn" title="How to Use">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          </button>
+          <!-- Travel Settings -->
+          <div class="ta-prefs-wrap" id="ta-prefs-wrap">
+            <button class="ta-prefs-btn" id="ta-prefs-btn" onclick="taTogglePrefs()" data-i18n-title="prefs.title" title="Travel Settings">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M12.22 2h-.44a2 2 0 00-2 2v.18a2 2 0 01-1 1.73l-.43.25a2 2 0 01-2 0l-.15-.08a2 2 0 00-2.73.73l-.22.38a2 2 0 00.73 2.73l.15.1a2 2 0 011 1.72v.51a2 2 0 01-1 1.74l-.15.09a2 2 0 00-.73 2.73l.22.38a2 2 0 002.73.73l.15-.08a2 2 0 012 0l.43.25a2 2 0 011 1.73V20a2 2 0 002 2h.44a2 2 0 002-2v-.18a2 2 0 011-1.73l.43-.25a2 2 0 012 0l.15.08a2 2 0 002.73-.73l.22-.39a2 2 0 00-.73-2.73l-.15-.08a2 2 0 01-1-1.74v-.5a2 2 0 011-1.74l.15-.09a2 2 0 00.73-2.73l-.22-.38a2 2 0 00-2.73-.73l-.15.08a2 2 0 01-2 0l-.43-.25a2 2 0 01-1-1.73V4a2 2 0 00-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+              <span class="ta-prefs-badge" id="ta-prefs-badge" style="display:none"></span>
+            </button>
+            <div class="ta-prefs-dropdown" id="ta-prefs-dropdown">
+              <div class="ta-prefs-section">
+                <div class="ta-prefs-label" data-i18n="prefs.dietary">Dietary</div>
+                <label class="ta-prefs-check">
+                  <input type="checkbox" id="ta-pref-muslim" value="muslim">
+                  <span data-i18n="prefs.muslim">Muslim Friendly</span>
+                </label>
+                <label class="ta-prefs-check">
+                  <input type="checkbox" id="ta-pref-vegan" value="vegan">
+                  <span data-i18n="prefs.vegan">Vegan</span>
+                </label>
+              </div>
+              <div class="ta-prefs-section">
+                <div class="ta-prefs-label" data-i18n="prefs.visitType">Visit Type</div>
+                <label class="ta-prefs-radio">
+                  <input type="radio" name="ta-visit-type" id="ta-pref-first" value="first">
+                  <span data-i18n="prefs.firstVisit">First Visit</span>
+                </label>
+                <label class="ta-prefs-radio">
+                  <input type="radio" name="ta-visit-type" id="ta-pref-return" value="return">
+                  <span data-i18n="prefs.returnVisit">Return Visit</span>
+                </label>
+              </div>
+              <button class="ta-prefs-apply" onclick="taApplyPrefs()" data-i18n="prefs.apply">Apply</button>
+            </div>
+          </div>
+          <!-- Language selector (hidden when logged in) -->
           <select class="ta-lang-select" id="ta-lang-select" onchange="taSetLanguage(this.value)">
             <option value="en">EN</option>
-            <option value="ko">KR</option>
             <option value="id">ID</option>
-            <option value="mn">MN</option>
             <option value="ms">MS</option>
             <option value="vi">VI</option>
+            <option value="mn">MN</option>
+            <option value="ko">KR</option>
           </select>
           <!-- Auth: Login/Profile -->
           <div class="ta-auth" id="ta-auth">
@@ -128,15 +165,21 @@
               <img class="ta-auth-avatar" id="ta-auth-avatar" src="" alt="">
               <div class="ta-auth-menu" id="ta-auth-menu">
                 <div class="ta-auth-name" id="ta-auth-name"></div>
+                <div class="ta-auth-menu-lang">
+                  <select class="ta-lang-select" id="ta-auth-lang-select" onchange="taSetLanguage(this.value)">
+                    <option value="en">EN</option>
+                    <option value="id">ID</option>
+                    <option value="ms">MS</option>
+                    <option value="vi">VI</option>
+                    <option value="mn">MN</option>
+                    <option value="ko">KR</option>
+                  </select>
+                </div>
                 <button onclick="taShowMySpots()" data-i18n="bookmark.mySpots">My Spots</button>
                 <button onclick="taShowPlanner()" data-i18n="planner.btn">Plan Trip</button>
                 <button onclick="taShowMyPlans()" data-i18n="planner.myPlans">My Plans</button>
                 <button class="ta-app-only" onclick="taShowTips()" data-i18n="tips.btn">Travel Tips</button>
-                <div class="ta-auth-menu-footer ta-app-only">
-                  <a href="/privacy" data-i18n="footer.privacy">Privacy</a>
-                  <span class="ta-footer-sep">·</span>
-                  <a href="/terms" data-i18n="footer.terms">Terms</a>
-                </div>
+                <button onclick="taShowAbout()" data-i18n="about.btn">About</button>
                 <button onclick="taSignOut()" data-i18n="auth.signOut">Sign Out</button>
               </div>
             </div>
@@ -159,15 +202,6 @@
       <!-- Explore Tab Content -->
       <div class="ta-tab-content active" id="ta-tab-explore">
         <div class="ta-filters">
-          <!-- Muslim Friendly Toggle -->
-          <div class="ta-muslim-toggle-wrap">
-            <label class="ta-muslim-label" for="ta-muslim-toggle">
-              <input type="checkbox" id="ta-muslim-toggle" onchange="taToggleMuslim()">
-              <span class="ta-muslim-switch"></span>
-              <span data-i18n="app.muslimToggle">Muslim Friendly</span>
-            </label>
-            <span class="ta-muslim-desc" id="ta-muslim-desc" style="display:none" data-i18n="app.muslimDesc">Showing halal restaurants & mosques</span>
-          </div>
           <div class="ta-cat-row-wrap" id="ta-cat-row-wrap">
           <div class="ta-cat-row" id="ta-cat-row">
             <button class="ta-cat-btn active" data-cat="all" data-i18n="app.catAll">All</button>
@@ -236,11 +270,11 @@
         </div>
       </div>
 
-      <!-- Tips Button (hidden in app mode) -->
-      <button class="ta-tips-btn ta-web-only" onclick="taShowTips()" data-i18n="tips.btn">Travel Tips</button>
+      <!-- Tips Button (desktop web only) -->
+      <button class="ta-tips-btn ta-desktop-only" onclick="taShowTips()" data-i18n="tips.btn">Travel Tips</button>
 
-      <!-- Footer (hidden in app mode) -->
-      <div class="ta-footer ta-web-only" id="ta-footer">
+      <!-- Footer (desktop web only) -->
+      <div class="ta-footer ta-desktop-only" id="ta-footer">
         <span data-i18n="footer.text"></span>
         <span class="ta-footer-sep">·</span>
         <a href="/privacy" data-i18n="footer.privacy">Privacy</a>
@@ -417,6 +451,30 @@
       <div id="ta-compare-content" class="ta-compare-content"></div>
       <div class="ta-form-actions">
         <button type="button" class="ta-btn-secondary" onclick="taCloseCompare()" data-i18n="planner.close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Modal -->
+  <div class="ta-modal-overlay" id="ta-about-overlay">
+    <div class="ta-modal ta-modal-about">
+      <button class="ta-modal-close" onclick="taCloseAbout()" aria-label="Close">&times;</button>
+      <h2 data-i18n="about.title">About TravelKo</h2>
+      <div class="ta-about-content" id="ta-about-content"></div>
+      <div class="ta-form-actions">
+        <button type="button" class="ta-btn-secondary" onclick="taCloseAbout()" data-i18n="planner.close">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- How to Use (App Guide) Modal -->
+  <div class="ta-modal-overlay" id="ta-guide-overlay">
+    <div class="ta-modal ta-modal-guide">
+      <button class="ta-modal-close" onclick="taCloseGuide()" aria-label="Close">&times;</button>
+      <h2 data-i18n="guide.title">How to Use TravelKo</h2>
+      <div class="ta-guide-content" id="ta-guide-content"></div>
+      <div class="ta-form-actions">
+        <button type="button" class="ta-btn-secondary" onclick="taCloseGuide()" data-i18n="planner.close">Close</button>
       </div>
     </div>
   </div>

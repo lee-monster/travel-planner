@@ -43,7 +43,7 @@ module.exports = async function handler(req, res) {
     todayCount = 0;
   }
 
-  const { spots, days, budget, style, lang } = req.body;
+  const { spots, days, budget, style, lang, visitType } = req.body;
 
   if (!spots || !spots.length || !days) {
     return res.status(400).json({ error: 'Missing required fields: spots, days' });
@@ -114,7 +114,8 @@ Use Google Search to find the latest information about each spot (opening hours,
 - Add practical tips (best time to visit, what to wear, reservations needed)
 - If spots are in different regions, plan travel days between regions
 - Respond ENTIRELY in ${respondLang}
-- Use markdown formatting for readability`;
+- Use markdown formatting for readability
+${visitType === 'first' ? '\n## First-Time Visitor\nThis traveler is visiting Korea for the FIRST TIME. Prioritize iconic must-visit landmarks, famous attractions, and quintessential Korean experiences. Include essential tips for first-time visitors.' : ''}${visitType === 'return' ? '\n## Return Visitor\nThis is a RETURN visitor who has already seen the major attractions. Focus on hidden gems, hip local spots, trendy neighborhoods, local favorites, and lesser-known attractions. Avoid overly touristy mainstream spots unless specifically selected.' : ''}`;
 
   const userPrompt = `Plan a ${days}-day Korea travel itinerary.
 

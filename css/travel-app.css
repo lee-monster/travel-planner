@@ -60,6 +60,92 @@ body {
 }
 .ta-koinfo-link:hover { color: var(--t-primary); background: var(--t-primary-bg); text-decoration: none; }
 
+/* === Guide Button === */
+.ta-guide-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border: 1px solid var(--t-gray-200);
+  border-radius: var(--t-radius-sm); background: var(--t-white);
+  color: var(--t-gray-600); cursor: pointer; transition: all var(--t-transition);
+  flex-shrink: 0;
+}
+.ta-guide-btn:hover { color: var(--t-primary); border-color: var(--t-primary); background: var(--t-primary-bg); }
+
+/* === Travel Settings (Prefs) === */
+.ta-prefs-wrap { position: relative; }
+.ta-prefs-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border: 1px solid var(--t-gray-200);
+  border-radius: var(--t-radius-sm); background: var(--t-white);
+  color: var(--t-gray-600); cursor: pointer; transition: all var(--t-transition);
+  flex-shrink: 0; position: relative;
+}
+.ta-prefs-btn:hover { color: var(--t-primary); border-color: var(--t-primary); background: var(--t-primary-bg); }
+.ta-prefs-btn.active { color: var(--t-primary); border-color: var(--t-primary); background: var(--t-primary-bg); }
+.ta-prefs-badge {
+  position: absolute; top: -3px; right: -3px;
+  width: 8px; height: 8px; background: var(--t-primary);
+  border-radius: 50%; border: 1.5px solid var(--t-white);
+}
+.ta-prefs-dropdown {
+  display: none; position: absolute; top: calc(100% + 6px); right: 0; z-index: 300;
+  background: var(--t-white); border: 1px solid var(--t-gray-200);
+  border-radius: var(--t-radius); box-shadow: var(--t-shadow-lg);
+  min-width: 200px; padding: 12px; animation: prefsFadeIn 0.15s ease;
+}
+.ta-prefs-wrap.open .ta-prefs-dropdown { display: block; }
+@keyframes prefsFadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+.ta-prefs-section { margin-bottom: 12px; }
+.ta-prefs-section:last-of-type { margin-bottom: 10px; }
+.ta-prefs-label {
+  font-size: 0.72rem; font-weight: 700; color: var(--t-gray-600);
+  text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px;
+}
+.ta-prefs-check, .ta-prefs-radio {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 0; font-size: 0.82rem; color: var(--t-gray-700);
+  cursor: pointer; user-select: none;
+}
+.ta-prefs-check input, .ta-prefs-radio input {
+  width: 16px; height: 16px; margin: 0; accent-color: var(--t-primary); cursor: pointer;
+}
+.ta-prefs-apply {
+  width: 100%; padding: 7px; border: none; border-radius: var(--t-radius-sm);
+  background: var(--t-primary); color: var(--t-white);
+  font-size: 0.82rem; font-weight: 600; cursor: pointer;
+  transition: background var(--t-transition);
+}
+.ta-prefs-apply:hover { background: var(--t-primary-dark); }
+
+/* === App Guide Modal === */
+.ta-modal-guide { max-width: 480px; }
+.ta-guide-content { margin: 16px 0; }
+.ta-guide-step {
+  display: flex; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid var(--t-gray-100);
+}
+.ta-guide-step:last-child { border-bottom: none; }
+.ta-guide-num {
+  flex-shrink: 0; width: 28px; height: 28px;
+  background: var(--t-primary); color: var(--t-white);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 0.78rem; font-weight: 700;
+}
+.ta-guide-step-body h4 {
+  font-size: 0.88rem; font-weight: 600; color: var(--t-gray-800); margin-bottom: 4px;
+}
+.ta-guide-step-body p {
+  font-size: 0.8rem; color: var(--t-gray-600); line-height: 1.5; margin: 0;
+}
+
+/* Auth menu language selector */
+.ta-auth-menu-lang {
+  padding: 6px 14px 8px; border-bottom: 1px solid var(--t-gray-100); margin-bottom: 4px;
+}
+.ta-auth-menu-lang .ta-lang-select { width: 100%; }
+
+/* Hide header lang select when logged in */
+.ta-auth-logged-in #ta-lang-select { display: none; }
+
 /* === Search (inside sidebar) === */
 .ta-search-wrap {
   padding: 10px 14px 0; position: relative; flex-shrink: 0;
@@ -709,38 +795,7 @@ body {
 .cat-mosque { background: #ECFEFF; color: #0891B2; }
 .cat-vegetarian { background: #F7FEE7; color: #65A30D; }
 
-/* === Muslim Friendly Toggle === */
-.ta-muslim-toggle-wrap {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-}
-.ta-muslim-label {
-  display: flex; align-items: center; gap: 6px; cursor: pointer;
-  font-size: 0.78rem; font-weight: 600; color: var(--t-gray-700);
-  user-select: none;
-}
-.ta-muslim-label input[type="checkbox"] {
-  display: none;
-}
-.ta-muslim-switch {
-  width: 36px; height: 20px; background: var(--t-gray-200);
-  border-radius: 10px; position: relative; transition: background 0.2s;
-  flex-shrink: 0;
-}
-.ta-muslim-switch::after {
-  content: ''; position: absolute; top: 2px; left: 2px;
-  width: 16px; height: 16px; background: white; border-radius: 50%;
-  transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-}
-.ta-muslim-label input:checked + .ta-muslim-switch {
-  background: #2563EB;
-}
-.ta-muslim-label input:checked + .ta-muslim-switch::after {
-  transform: translateX(16px);
-}
-.ta-muslim-desc {
-  font-size: 0.72rem; color: #2563EB; font-weight: 500;
-  background: #EFF6FF; padding: 2px 8px; border-radius: 4px;
-}
+/* (Muslim toggle removed — merged into Travel Settings dropdown) */
 
 /* === Mobile Bottom Sheet === */
 /* Drag handle hidden on desktop */
@@ -834,9 +889,14 @@ body {
   /* Hide old pseudo-element handle */
   .ta-sidebar::before { display: none; }
 
-  /* Better top bar on mobile */
-  .ta-topbar { height: 44px; padding: 0 10px; }
+  /* Fixed top bar on mobile */
+  .ta-topbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    height: 44px; padding: 0 10px;
+  }
   .ta-brand-logo { height: 28px; }
+  /* Offset sidebar below fixed header */
+  .ta-sidebar { padding-top: 44px; }
 
   /* Category row: horizontal scroll with fade hint */
   .ta-cat-row-wrap::after { display: block; }
@@ -850,12 +910,14 @@ body {
 
   /* Filter area compact */
   .ta-filters { padding: 6px 10px; gap: 6px; }
-  .ta-muslim-toggle-wrap { gap: 6px; }
 
   /* Better touch targets for spot cards */
   .ta-spot-card { padding: 10px; gap: 10px; min-height: 44px; }
   .ta-spot-thumb { width: 60px; height: 60px; }
   .ta-spot-name { font-size: 0.88rem; }
+
+  /* Prefs dropdown full-width on mobile */
+  .ta-prefs-dropdown { min-width: 180px; right: -40px; }
 
   /* Search */
   .ta-search-wrap { padding: 6px 10px 0; }
@@ -933,8 +995,7 @@ body {
   /* Region select bigger */
   .ta-region-select { padding: 8px 10px; font-size: 0.85rem; }
 
-  /* Footer compact */
-  .ta-footer { padding: 0.4rem 0.6rem; font-size: 0.65rem; }
+  /* Footer hidden on mobile (moved to About) */
 
   /* Toast above sidebar */
   .ta-toast { bottom: calc(50vh + 60px); font-size: 0.82rem; }
@@ -997,11 +1058,38 @@ body {
 .ta-auth-menu-footer a { color: var(--t-gray-400); text-decoration: none; font-size: 0.72rem; }
 .ta-auth-menu-footer a:hover { color: var(--t-primary); }
 
+/* Desktop-only: visible on desktop web, hidden on mobile and app */
+.ta-desktop-only { display: block; }
+@media (max-width: 768px) {
+  .ta-desktop-only { display: none !important; }
+}
+
 /* App mode (standalone/TWA): hide web-only, show app-only */
 .ta-app-only { display: none !important; }
 @media (display-mode: standalone) {
   .ta-web-only { display: none !important; }
+  .ta-desktop-only { display: none !important; }
   .ta-app-only { display: block !important; }
   .ta-auth-menu .ta-app-only { display: block !important; }
-  .ta-auth-menu-footer.ta-app-only { display: flex !important; }
 }
+
+/* About modal */
+.ta-modal-about { max-width: 400px; }
+.ta-about-content { margin: 16px 0; }
+.ta-about-logo { text-align: center; margin-bottom: 16px; }
+.ta-about-logo img { height: 48px; border-radius: 8px; }
+.ta-about-version {
+  text-align: center; font-size: 0.78rem; color: var(--t-gray-600); margin-bottom: 16px;
+}
+.ta-about-links {
+  display: flex; flex-direction: column; gap: 0;
+  border-top: 1px solid var(--t-gray-100);
+}
+.ta-about-links a {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 4px; font-size: 0.85rem; color: var(--t-gray-700);
+  text-decoration: none; border-bottom: 1px solid var(--t-gray-100);
+  transition: background var(--t-transition);
+}
+.ta-about-links a:hover { background: var(--t-gray-50); }
+.ta-about-links a::after { content: '›'; color: var(--t-gray-300); font-size: 1.1rem; }

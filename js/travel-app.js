@@ -11,6 +11,9 @@
     if (urlLang && SUPPORTED_LANGS.indexOf(urlLang) !== -1) return urlLang;
     var stored = localStorage.getItem('travelko_lang');
     if (stored && SUPPORTED_LANGS.indexOf(stored) !== -1) return stored;
+    // Auto-detect from browser language
+    var browserLang = (navigator.language || '').split('-')[0].toLowerCase();
+    if (SUPPORTED_LANGS.indexOf(browserLang) !== -1) return browserLang;
     return 'en';
   }
 
@@ -37,7 +40,8 @@
     // Bookmarks: [{spotId, type}]
     bookmarks: [],
     activeTab: 'explore',
-    muslimMode: false,
+    // Travel preferences (persisted in localStorage)
+    travelPrefs: JSON.parse(localStorage.getItem('travelko_prefs') || '{"muslim":false,"vegan":false,"visitType":null}'),
     // Cache all loaded spots by id for bookmark lookup across filters
     spotCache: {}
   };
@@ -236,6 +240,10 @@
       var key = el.getAttribute('data-i18n-ph');
       el.placeholder = t(key);
     });
+    document.querySelectorAll('[data-i18n-title]').forEach(function(el) {
+      var key = el.getAttribute('data-i18n-title');
+      el.title = t(key);
+    });
     var toggleBtns = document.querySelectorAll('.ta-map-provider-btn');
     toggleBtns.forEach(function(btn) {
       if (btn.dataset.provider === 'naver') btn.textContent = t('app.mapNaver');
@@ -248,6 +256,8 @@
     state.lang = lang;
     localStorage.setItem('travelko_lang', lang);
     document.getElementById('ta-lang-select').value = lang;
+    var authLangSel = document.getElementById('ta-auth-lang-select');
+    if (authLangSel) authLangSel.value = lang;
     updateUrlLang(lang);
     updateSeoMeta(lang);
     applyTranslations();
@@ -340,6 +350,8 @@
   function initLanguage() {
     var select = document.getElementById('ta-lang-select');
     select.value = state.lang;
+    var authLangSel = document.getElementById('ta-auth-lang-select');
+    if (authLangSel) authLangSel.value = state.lang;
     localStorage.setItem('travelko_lang', state.lang);
     updateUrlLang(state.lang);
     updateSeoMeta(state.lang);
@@ -499,6 +511,7 @@
     var profileEl = document.getElementById('ta-auth-profile');
     var avatarEl = document.getElementById('ta-auth-avatar');
     var nameEl = document.getElementById('ta-auth-name');
+    var headerLangSel = document.getElementById('ta-lang-select');
 
     if (state.authUser) {
       loginBtn.style.display = 'none';
@@ -506,9 +519,15 @@
       avatarEl.src = state.authUser.avatar || '';
       avatarEl.alt = state.authUser.name;
       nameEl.textContent = state.authUser.name;
+      // Hide header lang select, show in account menu
+      headerLangSel.style.display = 'none';
+      var authLangSel = document.getElementById('ta-auth-lang-select');
+      if (authLangSel) authLangSel.value = state.lang;
     } else {
       loginBtn.style.display = '';
       profileEl.style.display = 'none';
+      // Show header lang select
+      headerLangSel.style.display = '';
     }
   }
 
@@ -670,13 +689,18 @@
     var params = new URLSearchParams();
     params.set('lang', state.lang);
     params.set('limit', '100');
-    if (state.muslimMode && state.category !== 'all') {
-      // Muslim mode + specific category: show that category + halal + mosque
-      params.set('category', state.category + ',halal,mosque');
+    // Build category list from prefs + selected category
+    var prefCats = [];
+    if (state.travelPrefs.muslim) { prefCats.push('halal', 'mosque'); }
+    if (state.travelPrefs.vegan) { prefCats.push('vegetarian'); }
+
+    if (state.category !== 'all' && prefCats.length > 0) {
+      params.set('category', [state.category].concat(prefCats).join(','));
     } else if (state.category !== 'all') {
       params.set('category', state.category);
+    } else if (prefCats.length > 0) {
+      // "All" category + dietary prefs: no filter needed (show everything including pref spots)
     }
-    // Muslim mode + "all": no category filter needed (all spots including halal/mosque shown)
     if (state.region) params.set('region', state.region);
     if (append && state.nextCursor) params.set('cursor', state.nextCursor);
 
@@ -1350,7 +1374,8 @@
         days: days,
         budget: budget,
         style: style,
-        lang: state.lang
+        lang: state.lang,
+        visitType: state.travelPrefs.visitType
       })
     })
     .then(function(res) {
@@ -1831,6 +1856,60 @@
     return (TIPS_URLS[key] || {})[state.lang] || TIPS_URLS[key].en;
   }
 
+  // === About ===
+  window.taShowAbout = function() {
+    document.getElementById('ta-auth-profile').classList.remove('open');
+    var content = document.getElementById('ta-about-content');
+    content.innerHTML =
+      '<div class="ta-about-logo"><img src="images/main.png" alt="TravelKo"></div>' +
+      '<div class="ta-about-version">TravelKo v1.0.0</div>' +
+      '<div class="ta-about-links">' +
+        '<a href="/privacy" target="_blank">' + t('about.privacy') + '</a>' +
+        '<a href="/terms" target="_blank">' + t('about.terms') + '</a>' +
+        '<a href="https://koinfo.kr" target="_blank" rel="noopener">' + t('about.koinfo') + '</a>' +
+      '</div>';
+
+    document.getElementById('ta-about-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.taCloseAbout = function() {
+    document.getElementById('ta-about-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
+  // === App Guide (How to Use) ===
+  window.taShowGuide = function() {
+    var steps = [
+      { icon: '🔍', title: t('guide.step1Title'), desc: t('guide.step1Desc') },
+      { icon: '⚙️', title: t('guide.step2Title'), desc: t('guide.step2Desc') },
+      { icon: '📍', title: t('guide.step3Title'), desc: t('guide.step3Desc') },
+      { icon: '🗺️', title: t('guide.step4Title'), desc: t('guide.step4Desc') },
+      { icon: '❤️', title: t('guide.step5Title'), desc: t('guide.step5Desc') },
+      { icon: '✈️', title: t('guide.step6Title'), desc: t('guide.step6Desc') }
+    ];
+
+    var content = document.getElementById('ta-guide-content');
+    content.innerHTML = steps.map(function(step, i) {
+      return '<div class="ta-guide-step">' +
+        '<div class="ta-guide-num">' + (i + 1) + '</div>' +
+        '<div class="ta-guide-step-body">' +
+          '<h4>' + step.icon + ' ' + escapeHtml(step.title) + '</h4>' +
+          '<p>' + escapeHtml(step.desc) + '</p>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+    document.getElementById('ta-guide-overlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  };
+
+  window.taCloseGuide = function() {
+    document.getElementById('ta-guide-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+  };
+
+  // === Travel Tips ===
   window.taShowTips = function() {
     var content = document.getElementById('ta-tips-content');
     content.innerHTML =
@@ -1943,14 +2022,44 @@
     document.body.style.overflow = '';
   };
 
-  // === Muslim Toggle ===
-  window.taToggleMuslim = function() {
-    var toggle = document.getElementById('ta-muslim-toggle');
-    state.muslimMode = toggle.checked;
+  // === Travel Settings ===
+  window.taTogglePrefs = function() {
+    var wrap = document.getElementById('ta-prefs-wrap');
+    var isOpen = wrap.classList.contains('open');
+    // Close other open menus
+    document.getElementById('ta-auth-profile').classList.remove('open');
+    if (isOpen) {
+      wrap.classList.remove('open');
+    } else {
+      // Sync UI with current state
+      document.getElementById('ta-pref-muslim').checked = state.travelPrefs.muslim;
+      document.getElementById('ta-pref-vegan').checked = state.travelPrefs.vegan;
+      var visitType = state.travelPrefs.visitType;
+      document.getElementById('ta-pref-first').checked = visitType === 'first';
+      document.getElementById('ta-pref-return').checked = visitType === 'return';
+      wrap.classList.add('open');
+    }
+  };
 
-    var muslimDesc = document.getElementById('ta-muslim-desc');
-    muslimDesc.style.display = state.muslimMode ? '' : 'none';
+  window.taApplyPrefs = function() {
+    var muslim = document.getElementById('ta-pref-muslim').checked;
+    var vegan = document.getElementById('ta-pref-vegan').checked;
+    var firstVisit = document.getElementById('ta-pref-first').checked;
+    var returnVisit = document.getElementById('ta-pref-return').checked;
+    var visitType = firstVisit ? 'first' : (returnVisit ? 'return' : null);
 
+    state.travelPrefs = { muslim: muslim, vegan: vegan, visitType: visitType };
+    localStorage.setItem('travelko_prefs', JSON.stringify(state.travelPrefs));
+
+    // Update badge indicator
+    var badge = document.getElementById('ta-prefs-badge');
+    var hasPrefs = muslim || vegan || visitType;
+    badge.style.display = hasPrefs ? '' : 'none';
+
+    // Close dropdown
+    document.getElementById('ta-prefs-wrap').classList.remove('open');
+
+    // Re-fetch spots
     state.nextCursor = null;
     fetchSpots(false);
   };
@@ -2016,10 +2125,20 @@
       if (e.target === e.currentTarget) taClosePlanner();
     });
 
+    document.getElementById('ta-guide-overlay').addEventListener('click', function(e) {
+      if (e.target === e.currentTarget) taCloseGuide();
+    });
+
+    document.getElementById('ta-about-overlay').addEventListener('click', function(e) {
+      if (e.target === e.currentTarget) taCloseAbout();
+    });
+
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         taCloseSubmit();
         taClosePlanner();
+        taCloseGuide();
+        taCloseAbout();
         if (state.selectedSpot) taBackToList();
       }
     });
@@ -2309,12 +2428,28 @@
   }
 
   // === Init ===
+  function initPrefs() {
+    // Show badge if any prefs are active
+    var p = state.travelPrefs;
+    var badge = document.getElementById('ta-prefs-badge');
+    if (badge) badge.style.display = (p.muslim || p.vegan || p.visitType) ? '' : 'none';
+
+    // Close prefs dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      var wrap = document.getElementById('ta-prefs-wrap');
+      if (wrap && !wrap.contains(e.target)) {
+        wrap.classList.remove('open');
+      }
+    });
+  }
+
   function init() {
     initLanguage();
     applyTranslations();
     initFilters();
     initModalClose();
     initAuth();
+    initPrefs();
     initMap();
     fetchSpots(false);
     initBottomSheet();
