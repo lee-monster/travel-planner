@@ -6,7 +6,7 @@
     { "source": "/guide/taxi", "destination": "/guide/taxi.html" },
     { "source": "/guide/transport", "destination": "/guide/transport.html" },
     { "source": "/plan/:id", "destination": "/plan.html" },
-    { "source": "/spot/:id", "destination": "/api/spot-page?id=:id" },
+    { "source": "/spot/:id", "destination": "/api/travel-spots?render=page&id=:id" },
     { "source": "/.well-known/(.*)", "destination": "/.well-known/$1" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],

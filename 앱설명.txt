@@ -1,0 +1,91 @@
+
+  TravelKo is your ultimate Korea travel guide. Explore 300+ curated travel spots across Seoul,
+  Busan, Jeju, Gyeongju, Jeonju and more.
+
+   Key Features:
+   • Interactive map with Naver Maps & Google Maps
+   • 300+ verified travel spots with detailed info
+   • AI-powered trip planner creates custom itineraries
+   • Available in 6 languages: English, Korean, Indonesian, Mongolian, Malay, Vietnamese
+   • Bookmark your favorite spots and plan your visit
+   • Muslim-friendly & vegetarian spot filters
+   • Community-driven: submit and share your own spots
+
+  Whether you're planning your first trip to Korea or looking for hidden gems, TravelKo helps you
+  explore Korea with ease.
+
+  ---
+  TravelKo는 한국 여행 가이드 앱입니다. 서울, 부산, 제주, 경주, 전주 등 전국 300개 이상의 엄선된
+  여행지를 탐색하세요.
+
+  주요 기능:
+   • 네이버 지도 & 구글 지도 기반 인터랙티브 지도
+   • 300개 이상의 검증된 여행 스팟 상세 정보
+   • AI 기반 맞춤 여행 일정 자동 생성
+   • 6개 언어 지원: 한국어, 영어, 인도네시아어, 몽골어, 말레이어, 베트남어
+   • 북마크로 가고 싶은 곳 저장 및 일정 관리
+   • 무슬림 친화 & 채식 필터
+   • 커뮤니티 기반: 나만의 여행지 제출 및 공유
+
+   첫 한국 여행을 계획 중이든, 숨겨진 명소를 찾고 있든, TravelKo와 함께 편하게 한국을 여행하세요.
+
+ 
+ TravelKo adalah panduan perjalanan Korea terbaik Anda. Jelajahi 300+ tempat wisata pilihan di
+  Seoul, Busan, Jeju, Gyeongju, Jeonju dan lainnya.
+
+  Fitur Utama:
+   • Peta interaktif dengan Naver Maps & Google Maps
+   • 300+ tempat wisata terverifikasi dengan info lengkap
+   • Perencana perjalanan AI membuat itinerari khusus
+   • Tersedia dalam 6 bahasa: Indonesia, Inggris, Korea, Mongolia, Melayu, Vietnam
+   • Tandai tempat favorit dan rencanakan kunjungan Anda
+   • Filter ramah Muslim & vegetarian
+   • Berbasis komunitas: kirim dan bagikan tempat Anda sendiri
+
+  TravelKo membantu Anda menjelajahi Korea dengan mudah.
+
+
+
+  TravelKo бол таны Солонгос аялалын гарын авлага. Сөүл, Бусан, Жэжү, Кёнжү, Жонжү зэрэг газруудын
+  300 гаруй сонгомол аялалын цэгийг судлаарай.
+
+  Гол онцлогууд:
+   • Naver Maps & Google Maps дээрх интерактив газрын зураг
+   • 300+ баталгаажсан аялалын цэг дэлгэрэнгүй мэдээллээр
+   • AI аялалын төлөвлөгч тусгай хөтөлбөр зохионо
+   • 6 хэлээр: Монгол, Англи, Солонгос, Индонези, Малай, Вьетнам
+   • Дуртай газруудаа хадгалж, аяллаа төлөвлөөрэй
+   • Мусульман найрсаг & цагаан хоолны шүүлтүүр
+   • Олон нийтэд суурилсан: өөрийн газруудаа хуваалцаарай
+
+  TravelKo-тэй хамт Солонгосыг хялбархан аялаарай.
+
+ 
+  TravelKo ialah panduan perjalanan Korea terbaik anda. Terokai 300+ tempat pelancongan terpilih di
+  Seoul, Busan, Jeju, Gyeongju, Jeonju dan banyak lagi.
+
+  Ciri Utama:
+   • Peta interaktif dengan Naver Maps & Google Maps
+   • 300+ tempat pelancongan disahkan dengan maklumat terperinci
+   • Perancang perjalanan AI mencipta jadual tersuai
+   • Tersedia dalam 6 bahasa: Melayu, Inggeris, Korea, Indonesia, Mongolia, Vietnam
+   • Tandakan tempat kegemaran dan rancang lawatan anda
+   • Penapis mesra Muslim & vegetarian
+   • Berasaskan komuniti: hantar dan kongsi tempat anda sendiri
+
+  TravelKo membantu anda meneroka Korea dengan mudah.
+
+
+  TravelKo là hướng dẫn du lịch Hàn Quốc tốt nhất của bạn. Khám phá hơn 300 địa điểm du lịch được
+  tuyển chọn tại Seoul, Busan, Jeju, Gyeongju, Jeonju và nhiều nơi khác.
+
+  Tính năng chính:
+   • Bản đồ tương tác với Naver Maps & Google Maps
+   • Hơn 300 địa điểm du lịch đã xác minh với thông tin chi tiết
+   • AI lập kế hoạch tạo lịch trình tùy chỉnh
+   • Hỗ trợ 6 ngôn ngữ: Tiếng Việt, Anh, Hàn, Indonesia, Mông Cổ, Mã Lai
+   • Đánh dấu địa điểm yêu thích và lên kế hoạch chuyến thăm
+   • Bộ lọc thân thiện Hồi giáo & chay
+   • Dựa trên cộng đồng: gửi và chia sẻ địa điểm của bạn
+
+  TravelKo giúp bạn khám phá Hàn Quốc một cách dễ dàng.
