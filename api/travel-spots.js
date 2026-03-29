@@ -33,8 +33,8 @@ const LANG_FIELDS = {
   ko: { name: 'Name_ko', desc: 'Description_ko' },
   id: { name: 'Name_id', desc: 'Description_id' },
   mn: { name: 'Name_mn', desc: 'Description_mn' },
-  ms: { name: 'Name_id', desc: 'Description_id' },  // Malay falls back to Indonesian (similar language)
-  vi: { name: 'Name', desc: 'Description' },          // Vietnamese falls back to English
+  ms: { name: 'Name_ms', desc: 'Description_ms' },
+  vi: { name: 'Name_vi', desc: 'Description_vi' },
 };
 
 function formatSpot(page, lang) {
